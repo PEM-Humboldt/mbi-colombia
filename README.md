@@ -1,6 +1,5 @@
 Rutinas MBI Colombia
 ================
-true
 
 Este repositorio describe las rutinas utilizadas para la estimación de
 indicadores de biodiversidad, asociadas al Piloto para la construcción
@@ -16,7 +15,9 @@ dimensión tiene indicadores específicos asociados. Las rutinas de
 estimación de estos indicadores descritas en este repositorio incluyen
 la organización de insumos, el procesamiento y análisis de datos, y la
 estimación y normalización de los indicadores para su integración en el
-MBI. Las rutinas documentadas son:
+MBI.
+
+Las rutinas acá documentadas son:
 
 - [Subíndice
   BI](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex)
