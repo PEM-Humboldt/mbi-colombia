@@ -2,16 +2,16 @@ Rutinas MBI Colombia
 ================
 
 Este repositorio describe las rutinas utilizadas para la estimación de
-indicadores de biodiversidad, asociadas al Piloto para la construcción
-de un Índice Multidimensional de Biodiversidad (MBI) para Colombia. Por
-su definición multidimensional, el MBI integra múltiples aspectos del
-estado de la biodiversidad en un único valor de reporte, que comunica de
-manera efectiva el estado de la biodiversidad y facilita la toma de
-decisiones informadas para su gestión. El IMB está conformado por el
-Subíndice de Estado de la Biodiversidad (BI) y el Subíndice de
-Contribuciones de la Biodiversidad a las Personas (BCPI). Cada uno de
-estos subíndices está constituido por múltiples dimensiones, y cada
-dimensión tiene indicadores específicos asociados. Las rutinas de
+indicadores de estado de biodiversidad, asociadas al Piloto para la
+construcción de un Índice Multidimensional de Biodiversidad (MBI) para
+Colombia. Por su definición multidimensional, el MBI integra múltiples
+aspectos de estado y tendencia de la biodiversidad en un único valor de
+reporte, que comunica de manera efectiva el estado de la biodiversidad y
+facilita la toma de decisiones informadas para su gestión. El MBI está
+conformado por el Subíndice de Estado de la Biodiversidad (BI) y el
+Subíndice de Contribuciones de la Biodiversidad a las Personas (BCPI).
+Cada uno de estos subíndices está constituido por múltiples dimensiones,
+y cada dimensión tiene indicadores específicos asociados. Las rutinas de
 estimación de estos indicadores descritas en este repositorio incluyen
 la organización de insumos, el procesamiento y análisis de datos, y la
 estimación y normalización de los indicadores para su integración en el
