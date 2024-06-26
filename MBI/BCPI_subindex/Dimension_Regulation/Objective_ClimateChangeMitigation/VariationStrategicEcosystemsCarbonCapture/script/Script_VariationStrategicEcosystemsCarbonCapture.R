@@ -50,7 +50,7 @@ sf::sf_use_s2(F) # desactivar el uso de la biblioteca s2 para las operaciones ge
 studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggregate() %>% sf::st_as_sf() # se carga y se disuleve para optimizar el analisis
 
 ### Cargar ecosistemas estrategicos ####
-list_strategic<- pblapply(input$StratEcoSystemList, function(x) st_read(x))
+list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(input$StratEcoSystemList[[j]]) %>% dplyr::mutate(ZonaEcos=j) )
 
 #### Corte de ecosistemas estrategicos por area de estudio ####
 list_strategics_studyArea<- pblapply(list_strategic, function(eco_strategic) {
@@ -59,10 +59,12 @@ list_strategics_studyArea<- pblapply(list_strategic, function(eco_strategic) {
   strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
   })
 
+sf_union <- do.call(st_union, sf_list)
 
-aa<- list_strategics_studyArea %>% plyr::rbind.fill() %>% st_as_sf()
-bb<- st_union(aa)
-  
+aa<- 
+
+
+
 
 ### Cargar coberturas ####
 list_covs<- pblapply(input$timeNatCoverList, function(x) st_read(x) )
