@@ -77,7 +77,7 @@ Están organizadas de esta manera que facilita la ejecución del código:
 #### Verificar e instalar las librerías necesarias ####
 packagesPrev <- installed.packages()[,"Package"]  
 packagesNeed <- c("this.path", "magrittr", "dplyr", "plyr", "pbapply", "sf", "ggplot2", 
-                               "tidyr","openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
+                               "tidyr", "terra", "openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
 new.packages <- packagesNeed[!(packagesNeed %in% packagesPrev)]  # Identifica los paquetes que no están instalados
 if(length(new.packages)) {install.packages(new.packages, binary = TRUE)}  # Instala los paquetes necesarios que no están previamente instalados
 
