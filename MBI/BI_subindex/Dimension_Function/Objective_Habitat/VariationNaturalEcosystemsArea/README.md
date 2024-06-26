@@ -28,6 +28,7 @@ respecto a un tiempo de referencia. La temporalidad de reporte de este
 índice es irregular, ya que depende de la actualización del insumo de
 coberturas naturales continentales para Colombia.
 
+
 - [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
 - [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
   - [Cargar librerias/paquetes necesarios para el
@@ -136,11 +137,11 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
-    "2008"= file.path(input_folder, "covs", "CLC_natural_2008.gpkg"), # Cobertura natural del año 2008 IDEAM
-    "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"),  # Cobertura natural del año 2009 IDEAM
+    "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
+    "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
     "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
   )
 )
@@ -152,7 +153,7 @@ espacial del área de estudio. Además, la entrada de lista
 coberturas naturales en diferentes momentos. En este caso, se utilizaron
 los polígonos de coberturas naturales según la clasificación Corine Land
 Cover para Colombia, reportados por el IDEAM a escala 1:100k para los
-años 2002, 2009, 2008 y 2017. No se realiza procesamiento posterior a
+años 2002, 2009, 2012 y 2018 No se realiza procesamiento posterior a
 estos mapas, ya que el código asume que los poligonos de dichas entradas
 corresponden solo a coberturas naturales en esos periodos. Es importante
 que los nombres de cada elemento a cargar se especifiquen con años
