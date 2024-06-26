@@ -25,12 +25,18 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
     "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
     "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
+  ),
+  StratEcoSystemList= list( # Lista de rutas de archivos espaciales que representan ecosistemas estrategicos.
+    "Manglar"= file.path(input_folder, "strategicEcosystems", "Bioms_Manglar.gpkg"), # Biomas asociados a manglar
+    "Paramo"= file.path(input_folder, "strategicEcosystems", "Bioms_Paramo.gpkg"), # Biomas asociados a Paramo
+    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueSeco.gpkg"), # Biomas asociados a BosqueSeco
+    "BosqueHumedo"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueHumedo.gpkg") # Biomas asociados a BosqueHumedo
   )
 )
 
@@ -43,16 +49,42 @@ sf::sf_use_s2(F) # desactivar el uso de la biblioteca s2 para las operaciones ge
 ### Cargar area de estudio ####
 studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggregate() %>% sf::st_as_sf() # se carga y se disuleve para optimizar el analisis
 
+### Cargar ecosistemas estrategicos ####
+list_strategic<- pblapply(input$StratEcoSystemList, function(x) st_read(x))
+
+#### Corte de ecosistemas estrategicos por area de estudio ####
+list_strategics_studyArea<- pblapply(list_strategic, function(eco_strategic) {
+  test_crop_studyArea<- eco_strategic  %>%  st_crop( studyArea )
+  test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
+  strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  })
+
+
+aa<- list_strategics_studyArea %>% plyr::rbind.fill() %>% st_as_sf()
+bb<- st_union(aa)
+  
+
 ### Cargar coberturas ####
-list_covs<- pblapply(input$timeNatCoverList, function(x) st_read(x))
+list_covs<- pblapply(input$timeNatCoverList, function(x) st_read(x) )
 list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
 
-#### Corte de coberturas por area de estudio ####
+#### Corte de coberturas por ecosistemas estrategicos en area de estudio ####
 list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea )
-  test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
-  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  test_crop_studyArea<- NatCovs  %>%  st_crop( list_strategics_studyArea ) %>% sf::st_set_geometry("geometry")
+  test_intersects_studyArea<- sf::st_intersects(list_strategics_studyArea, test_crop_studyArea)
+  
+  
+  %>% as.data.frame()
+  NatCovs_studyArea<- st_intersection(list_strategics_studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
 })
+
+
+
+
+
+
+
+
 
 ## Estimar area por periodo ####
 area_cobsNat<- pblapply(names(list_covs_studyArea), function(i_testArea) {

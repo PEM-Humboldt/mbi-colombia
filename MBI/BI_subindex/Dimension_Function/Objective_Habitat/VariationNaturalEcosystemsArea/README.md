@@ -46,7 +46,7 @@ coberturas naturales continentales para Colombia.
 
 Las entradas de ejemplo de este ejercicio están almacenadas en
 [IAvH/Unidades
-compartidas/MBI/VariationNaturalEcosystemsArea](https://drive.google.com/drive/folders/1DGOnUX2tLY5agzcAnOmLWUPN1qKCcOJ7?usp=drive_link).
+compartidas/MBI/VariationNaturalEcosystemsArea/scripts](https://drive.google.com/open?id=1-kNyyptInMkeqaK5MGcMekZ0J49U-gJd&usp=drive_fs).
 Están organizadas de esta manera que facilita la ejecución del código:
 
     script
@@ -77,7 +77,7 @@ Están organizadas de esta manera que facilita la ejecución del código:
 #### Verificar e instalar las librerías necesarias ####
 packagesPrev <- installed.packages()[,"Package"]  
 packagesNeed <- c("this.path", "magrittr", "dplyr", "plyr", "pbapply", "sf", "ggplot2", 
-                               "tidyr", "terra", "openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
+                               "tidyr","openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
 new.packages <- packagesNeed[!(packagesNeed %in% packagesPrev)]  # Identifica los paquetes que no están instalados
 if(length(new.packages)) {install.packages(new.packages, binary = TRUE)}  # Instala los paquetes necesarios que no están previamente instalados
 
