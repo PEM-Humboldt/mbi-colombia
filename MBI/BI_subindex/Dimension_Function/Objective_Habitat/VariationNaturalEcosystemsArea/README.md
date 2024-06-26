@@ -15,7 +15,6 @@ output:
 Flujo de trabajo VariationNaturalEcosystemsArea – Indicador de variación
 del área de ecosistemas naturales continentales en Colombia
 ================
-
 Esta rutina está diseñada para estimar el Indicador de Variación del
 Área de Ecosistemas Naturales Continentales en Colombia. Esto refleja la
 importancia de los hábitats continentales como factores vinculados a la
