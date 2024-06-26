@@ -28,18 +28,22 @@ true
 - [Estimar area por periodo](#estimar-area-por-periodo)
 - [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
 
-Esta rutina está diseñada para estimar el Indicador de Variación del
-Área de Ecosistemas Naturales Continentales en Colombia. Esto refleja la
-importancia de los hábitats continentales como factores vinculados a la
-estabilidad y función de los ecosistemas. Los cambios en el área de los
-ecosistemas naturales afectan directamente la capacidad de estos
-sistemas para mantener el flujo de procesos y la funcionalidad que los
-caracteriza. Este índice proporciona información sobre los cambios en la
-extensión de coberturas naturales en ecosistemas naturales
-continentales, midiendo específicamente las variaciones de extensión
-respecto a un tiempo de referencia. La temporalidad de reporte de este
-índice es irregular, ya que depende de la actualización del insumo de
-coberturas naturales continentales para Colombia.
+Esta rutina estima el Indicador de Variación del Área de Ecosistemas
+Estratégicos con Potencial de Captura de Carbono en Colombia. Los
+ecosistemas estratégicos en Colombia incluyen los bosques andinos, los
+bosques secos, los humedales, los páramos y los manglares, que
+desempeñan un papel fundamental en la captura y almacenamiento de
+carbono por su capacidad de absorber CO2 de la atmósfera y almacenarlo
+en la biomasa y el suelo, contribuyendo así a la regulación del ciclo
+del carbono y la mitigación del cambio climático.
+
+Bajo esta idea, cuantificar las variaciones de extensión de estos
+ecosistemas brinda información sobre su capacidad para seguir capturando
+carbono. Este índice mide los cambios en la extensión de coberturas
+naturales en las zonas delimitadas como ecosistemas estratégicos en
+Colombia. De manera que se describen tendencias de pérdida o ganancia de
+áreas naturales de estos ecosistemas, lo cual es fundamental para
+entender y mantener su potencial de captura de carbono.
 
 ## Organizar directorio de trabajo
 
@@ -47,7 +51,7 @@ coberturas naturales continentales para Colombia.
 
 Las entradas de ejemplo de este ejercicio están almacenadas en
 [IAvH/Unidades
-compartidas/MBI/VariationNaturalEcosystemsArea](https://drive.google.com/drive/folders/1DGOnUX2tLY5agzcAnOmLWUPN1qKCcOJ7?usp=drive_link).
+compartidas/MBI/VariationStrategicEcosystemsCarbonCapture](https://drive.google.com/drive/folders/1DGOnUX2tLY5agzcAnOmLWUPN1qKCcOJ7?usp=drive_link).
 Están organizadas de esta manera que facilita la ejecución del código:
 
     script
@@ -57,13 +61,21 @@ Están organizadas de esta manera que facilita la ejecución del código:
     │ │
     │ └- studyArea
     │ │   │
-    │ │   │- studyArea.shp
-    │ │ 
+    │ │   │- studyArea.gpkg
+    │ │
+    │ │
+    │ └- strategicEcosystems
+    │ │   │
+    │ │   │- StratEcoSystem_1.gpkg
+    │ │   │- ...
+    │ │   │- StratEcoSystem_2.gpkg
+    │ │
+    │ │
     │ └- covs
     │     │
-    │     │- NatCovs_tiempo_1.shp
+    │     │- NatCovs_tiempo_1.gpkg
     │     │- ...
-    │     │- NatCovs_tiempo_n.shp
+    │     │- NatCovs_tiempo_n.gpkg
     │     
     └-output
 
@@ -77,7 +89,8 @@ Están organizadas de esta manera que facilita la ejecución del código:
 
 #### Verificar e instalar las librerías necesarias ####
 packagesPrev <- installed.packages()[,"Package"]  
-packagesNeed <- c("magrittr", "this.path", "sf", "plyr", "dplyr", "vegan", "ggspatial")  # Define los paquetes necesarios para ejecutar el codigo
+packagesNeed <- librerias <- c("this.path", "magrittr", "dplyr", "plyr", "pbapply", "data.table", "raster", "terra", "sf", "ggplot2", 
+                               "tidyr", "reshape2","openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
 new.packages <- packagesNeed[!(packagesNeed %in% packagesPrev)]  # Identifica los paquetes que no están instalados
 if(length(new.packages)) {install.packages(new.packages, binary = TRUE)}  # Instala los paquetes necesarios que no están previamente instalados
 
@@ -146,18 +159,39 @@ input <- list(
 )
 ```
 
-La lista de entradas incluye `studyArea` como la ruta al archivo
-espacial del área de estudio. Además, la entrada de lista
-`timeNatCoverList` compila las rutas de archivos espaciales de
-coberturas naturales en diferentes momentos. En este caso, se utilizaron
-los polígonos de coberturas naturales según la clasificación Corine Land
-Cover para Colombia, reportados por el IDEAM a escala 1:100k para los
-años 2002, 2009, 2008 y 2017. No se realiza procesamiento posterior a
-estos mapas, ya que el código asume que los poligonos de dichas entradas
-corresponden solo a coberturas naturales en esos periodos. Es importante
-que los nombres de cada elemento a cargar se especifiquen con años
-numéricos, ya que esto será útil para organizar el análisis de cambio y
-tendencias posterior.
+La lista de entradas incluye studyArea como la ruta al archivo espacial
+del área de estudio.
+
+La lista StratEcoSystemList compila las rutas de los archivos espaciales
+de la delimitación de los ecosistemas estratégicos. Cada elemento de la
+lista corresponde a la zona de delimitación de cada ecosistema
+estratégico. Esta tarea es compleja debido a que muchos de los mapas
+disponibles sobre ecosistemas estratégicos reportan delimitaciones
+generales o remanentes actuales sin información detallada del área
+potencial base. Esto implica que las delimitaciones pueden no reflejar
+completamente el rango histórico o potencial de los ecosistemas, lo cual
+puede afectar la precisión de los análisis espaciales. Para este
+ejercicio, se utilizaron como límites los biomas asociados a los
+ecosistemas estratégicos de bosques andinos, bosques secos, humedales,
+páramos y manglares. Estos biomas fueron seleccionados debido a su
+importancia ecológica y su capacidad significativa para capturar y
+almacenar carbono. Sin embargo, es importante señalar que el código es
+flexible y puede ejecutarse con las delimitaciones de ecosistemas
+estratégicos que el investigador considere más apropiadas para su
+estudio. Cada elemento de la lista debe nombrarse con el nombre del
+ecosistema estratégico al que hace referencia para facilitar la
+exploración y el análisis de los resultados.
+
+Por último, la entrada de la lista timeNatCoverList compila las rutas de
+archivos espaciales de coberturas naturales en diferentes momentos. En
+este caso, se utilizaron los polígonos de coberturas naturales según la
+clasificación Corine Land Cover para Colombia, reportados por el IDEAM a
+escala 1:100k para los años 2002, 2009, 2008 y 2017. No se realiza
+procesamiento posterior a estos mapas, ya que el código asume que los
+polígonos de dichas entradas corresponden solo a coberturas naturales en
+esos periodos. Es importante que los nombres de cada elemento a cargar
+se especifiquen con años numéricos, ya que esto será útil para organizar
+el análisis de cambio y tendencias posterior.
 
 ## Cargar insumos
 
@@ -205,13 +239,6 @@ area_cobsNat<- pblapply(names(list_covs_studyArea), function(i_testArea) {
 print(area_cobsNat)
 ```
 
-| period | area_km2 |
-|:-------|---------:|
-| 2002   | 831507.3 |
-| 2009   | 822809.7 |
-| 2012   | 806694.4 |
-| 2018   | 808158.8 |
-
 Esto permite realizar un seguimiento de las variaciones en la extensión
 de los ecosistemas naturales continentales a lo largo del tiempo.
 Nuestro objetivo es estandarizar esa variación en un índice. Para ello,
@@ -244,13 +271,6 @@ if(i>1){
 print(changeArea_cobsNat)
 ```
 
-| period | area_km2 | changeArea | perc_changeArea |      trend |
-|:-------|---------:|-----------:|----------------:|-----------:|
-| 2002   | 831507.3 |         NA |              NA |         NA |
-| 2009   | 822809.7 |  -8697.544 |      -0.0104600 | -0.0104600 |
-| 2012   | 806694.4 | -16115.295 |      -0.0195857 | -0.0300457 |
-| 2018   | 808158.8 |   1464.418 |       0.0018153 | -0.0132075 |
-
 ## Plot de cambio y tendencia
 
 Por ultimo se ajustaron los resultados para visualización que permita
@@ -274,7 +294,7 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 ```
 
-![](README_figures/results_trend.jpg)
+![](README_figures/results_trend.png)
 
 Las áreas estimadas por periodos se presentan como valores absolutos, el
 cambio en área como el delta entre los periodos comparados, mientras que

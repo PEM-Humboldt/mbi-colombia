@@ -24,14 +24,15 @@ input_folder<- file.path(dir_work, "input"); # "~/input"
 output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
-
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
-    "2012"= "L:/Unidades compartidas/Solicitudes/SIRAPorinoquia/input/Coberturas/CLC_2012/natural.gpkg",  # Cobertura natural del año 2008
-    "2018"= "L:/Unidades compartidas/Solicitudes/SIRAPorinoquia/input/Coberturas/CLC_2018/natural.gpkg" # Cobertura natural del año 2017
-  ))
-  
+    "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
+    "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
+    "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
+    "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
+  )
+)
 
 
 ## Cargar insumos ####
