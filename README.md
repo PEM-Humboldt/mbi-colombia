@@ -1,6 +1,5 @@
 Rutinas MBI Colombia
 ================
-
 Este repositorio describe las rutinas utilizadas para la estimación de
 indicadores de estado de biodiversidad, asociadas al Piloto para la
 construcción de un Índice Multidimensional de Biodiversidad (MBI) para
@@ -32,7 +31,7 @@ Las rutinas acá documentadas son:
     - [Objetivo
       Hábitat](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Function/Objective_Habitat)
       - [Indicador de variación del área de ecosistemas naturales
-        continentales]()
+        continentales](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea)
 - [Subíndice
   BCPI](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex)
   - [Dimensión
@@ -40,7 +39,8 @@ Las rutinas acá documentadas son:
     - [Objetivo Mitigación del Cambio
       Climático](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation)
       - [Indicador de variación en la extensión de ecosistemas
-        estratégicos con potencial de captura de carbono]()
+        estratégicos con potencial de captura de
+        carbono](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
   - [Dimensión No Material o
     Intangible](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_NonMaterialIntangible)
     - [Objetivo Salud y Calidad de

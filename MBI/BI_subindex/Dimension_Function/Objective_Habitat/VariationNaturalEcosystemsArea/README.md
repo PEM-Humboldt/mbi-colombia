@@ -15,19 +15,6 @@ output:
 Flujo de trabajo VariationNaturalEcosystemsArea – Indicador de variación
 del área de ecosistemas naturales continentales en Colombia
 ================
-true
-
-- [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
-- [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
-  - [Cargar librerias/paquetes necesarios para el
-    análisis](#cargar-libreriaspaquetes-necesarios-para-el-análisis)
-- [Establecer entorno de trabajo](#establecer-entorno-de-trabajo)
-  - [Definir inputs y direccion
-    output](#definir-inputs-y-direccion-output)
-- [Cargar insumos](#cargar-insumos)
-- [Estimar area por periodo](#estimar-area-por-periodo)
-- [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
-
 Esta rutina está diseñada para estimar el Indicador de Variación del
 Área de Ecosistemas Naturales Continentales en Colombia. Esto refleja la
 importancia de los hábitats continentales como factores vinculados a la
@@ -40,6 +27,18 @@ continentales, midiendo específicamente las variaciones de extensión
 respecto a un tiempo de referencia. La temporalidad de reporte de este
 índice es irregular, ya que depende de la actualización del insumo de
 coberturas naturales continentales para Colombia.
+
+- [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
+- [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
+  - [Cargar librerias/paquetes necesarios para el
+    análisis](#cargar-libreriaspaquetes-necesarios-para-el-análisis)
+- [Establecer entorno de trabajo](#establecer-entorno-de-trabajo)
+  - [Definir inputs y direccion
+    output](#definir-inputs-y-direccion-output)
+- [Cargar insumos](#cargar-insumos)
+- [Estimar area por periodo](#estimar-area-por-periodo)
+- [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
+- [Exportar resultados](#exportar-resultados)
 
 ## Organizar directorio de trabajo
 
@@ -284,3 +283,13 @@ extensión de coberturas naturales en ecosistemas continentales, y 1
 indica que se mantuvo o se superó la extensión de referencia. Esto
 permite una interpretación clara y directa de los cambios y tendencias
 en la extensión de los ecosistemas naturales a lo largo del tiempo.
+
+## Exportar resultados
+
+``` r
+# Exportar tablas
+openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
+openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+# Exportar figuras
+ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+```
