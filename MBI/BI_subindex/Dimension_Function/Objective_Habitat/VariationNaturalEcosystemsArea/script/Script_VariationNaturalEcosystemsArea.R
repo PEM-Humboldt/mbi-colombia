@@ -4,7 +4,7 @@
 #### Verificar e instalar las librerC-as necesarias ####
 packagesPrev <- installed.packages()[,"Package"]  
 packagesNeed <- librerias <- c("this.path", "magrittr", "dplyr", "plyr", "pbapply", "sf", "ggplot2", 
-                               "tidyr",, "ggnewscale","openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
+                               "tidyr","openxlsx")  # Define los paquetes necesarios para ejecutar el codigo
 new.packages <- packagesNeed[!(packagesNeed %in% packagesPrev)]  # Identifica los paquetes que no estC!n instalados
 if(length(new.packages)) {install.packages(new.packages, binary = TRUE)}  # Instala los paquetes necesarios que no estC!n previamente instalados
 
