@@ -20,7 +20,7 @@ Bajo esta idea, cuantificar las variaciones de extensión de estos ecosistemas b
 ## Organizar directorio de trabajo
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationStrategicEcosystemsCarbonCapture](https://drive.google.com/drive/folders/1DGOnUX2tLY5agzcAnOmLWUPN1qKCcOJ7?usp=drive_link). Están organizadas de esta manera que facilita la ejecución del código:
+Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationStrategicEcosystemsCarbonCapture](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs). Están organizadas de esta manera que facilita la ejecución del código:
 
 ```
 script
