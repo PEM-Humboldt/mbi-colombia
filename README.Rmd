@@ -27,7 +27,7 @@ Las rutinas acá documentadas son:
             *	[Indicador de variación en la extensión de ecosistemas estratégicos con potencial de captura de carbono](./MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
     *	[Dimensión No Material o Intangible](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible)
         * [Objetivo Salud y Calidad de vida](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
-            * [Indicador de la variación en la huella humana en áreas de manejo especial](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife/VariationHumanFootprintSpecialAreas)
+            * [Indicador de la variación en la huella humana en áreas de manejo especial](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife/)
 
 ## Referencias
 * [Soto-Navarro, C. A., Harfoot, M., Hill, S. L., Campbell, J., Campos-Santos, H.-C., Mora, F., Pretorius, C., Kapos, V., Allison, H., & Burgess, N. D. (2020). Building a Multidimensional Biodiversity Index—A Scorecard for Biodiversity Health (UNEP-WCMC, 2020). UN Environment Programme World Conservation Monitoring Centre (UNEP-WCMC), Cambridge, UK and Luc Hoffmann Institute (LHI).](https://wedocs.unep.org/bitstream/handle/20.500.11822/38023/biodiversity_index.pdf?sequence=3&isAllowed=y)
