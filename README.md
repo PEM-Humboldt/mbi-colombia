@@ -21,30 +21,30 @@ MBI.
 Las rutinas acá documentadas son:
 
 - [Subíndice BI](./MBI/BI_subindex)
-  - [Dimensión Diversidad](./BI_subindex/Dimension_Diversity)
+  - [Dimensión Diversidad](./MBI/BI_subindex/Dimension_Diversity)
     - [Objetivo
-      Genético](./BI_subindex/Dimension_Diversity/Objective_Genetic)
+      Genético](./MBI/BI_subindex/Dimension_Diversity/Objective_Genetic)
       - [Indicador genético del estado de
-        poblaciones](./BI_subindex/Dimension_Diversity/Objective_Genetic/GeneticStatePopulations)
-  - [Dimensión Función](./BI_subindex/Dimension_Function)
+        poblaciones](./MBI/BI_subindex/Dimension_Diversity/Objective_Genetic/GeneticStatePopulations)
+  - [Dimensión Función](./MBI/BI_subindex/Dimension_Function)
     - [Objetivo
-      Hábitat](./BI_subindex/Dimension_Function/Objective_Habitat)
+      Hábitat](./MBI/BI_subindex/Dimension_Function/Objective_Habitat)
       - [Indicador de variación del área de ecosistemas naturales
-        continentales](./BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea)
-- [Subíndice BCPI](./BCPI_subindex)
-  - [Dimensión Regulación](./BCPI_subindex/Dimension_Regulation)
+        continentales](./MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea)
+- [Subíndice BCPI](./MBI/BCPI_subindex)
+  - [Dimensión Regulación](./MBI/BCPI_subindex/Dimension_Regulation)
     - [Objetivo Mitigación del Cambio
-      Climático](./BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation)
+      Climático](./MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation)
       - [Indicador de variación en la extensión de ecosistemas
         estratégicos con potencial de captura de
-        carbono](./BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
+        carbono](./MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
   - [Dimensión No Material o
-    Intangible](./BCPI_subindex/Dimension_NonMaterialIntangible)
+    Intangible](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible)
     - [Objetivo Salud y Calidad de
-      vida](./BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
+      vida](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
       - [Indicador de la variación en la huella humana en áreas de
         manejo
-        especial](./BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife%20/VariationHumanFootprintSpecialAreas)
+        especial](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife%20/VariationHumanFootprintSpecialAreas)
 
 ## Referencias
 
