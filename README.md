@@ -1,5 +1,7 @@
 Rutinas MBI Colombia
 ================
+true
+
 Este repositorio describe las rutinas utilizadas para la estimación de
 indicadores de estado de biodiversidad, asociadas al Piloto para la
 construcción de un Índice Multidimensional de Biodiversidad (MBI) para
@@ -18,8 +20,7 @@ MBI.
 
 Las rutinas acá documentadas son:
 
-- [Subíndice
-  BI](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex)
+- [Subíndice BI](./MBI/BI_subindex)
   - [Dimensión
     Diversidad](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Diversity)
     - [Objetivo
