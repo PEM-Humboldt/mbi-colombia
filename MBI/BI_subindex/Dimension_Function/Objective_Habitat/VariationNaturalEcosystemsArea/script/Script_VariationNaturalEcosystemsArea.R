@@ -94,5 +94,11 @@ openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_co
 ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
 
 
+# exportar resultados espaciales
+folder_cobsNat_ecosystemContinental<- file.path(output, "cobsNat_ecosystemContinental"); dir.create(folder_cobsNat_ecosystemContinental)
+export_pol<- pblapply(names(list_covs_studyArea), function(i_testArea) {
+  pol<-  list_covs_studyArea[[i_testArea]]
+  sf::st_write(pol, file.path(folder_cobsNat_ecosystemContinental, paste0(basename(folder_cobsNat_ecosystemContinental), "_", i_testArea, ".gpkg")), delete_dsn=T)
+})
 
 

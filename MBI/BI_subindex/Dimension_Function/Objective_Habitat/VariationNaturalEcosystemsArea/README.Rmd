@@ -196,11 +196,20 @@ print(changeArea_plot)
 Las áreas estimadas por periodos se presentan como valores absolutos, el cambio en área como el delta entre los periodos comparados, mientras que el porcentaje de cambio de área y la tendencia se representan en una escala entre -1 y 1. En esta escala, -1 representa una pérdida de extensión de coberturas naturales en ecosistemas continentales, y 1 indica que se mantuvo o se superó la extensión de referencia. Esto permite una interpretación clara y directa de los cambios y tendencias en la extensión de los ecosistemas naturales a lo largo del tiempo.
 
 
-## Exportar resultados ####
+## Exportar resultados
 ```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
+## Exportar resultados ####
 # Exportar tablas
 openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
 openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
 # Exportar figuras
 ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+
+
+# exportar resultados espaciales
+folder_cobsNat_ecosystemContinental<- file.path(output, "cobsNat_ecosystemContinental"); dir.create(folder_cobsNat_ecosystemContinental)
+export_pol<- pblapply(names(list_covs_studyArea), function(i_testArea) {
+  pol<-  list_covs_studyArea[[i_testArea]]
+  sf::st_write(pol, file.path(folder_cobsNat_ecosystemContinental, paste0(basename(folder_cobsNat_ecosystemContinental), "_", i_testArea, ".gpkg")), delete_dsn=T)
+})
 ```

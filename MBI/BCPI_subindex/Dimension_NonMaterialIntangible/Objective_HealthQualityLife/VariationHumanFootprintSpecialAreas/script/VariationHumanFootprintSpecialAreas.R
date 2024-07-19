@@ -25,20 +25,16 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
-  timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
-    "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
-    "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
-    "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
-    "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
+  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
+  time_IHEH_List= list( # Lista de rutas de archivos espaciales que representan huella humana en diferentes años. Deben tener los mismos rangos de valor para ser comparables (ej. 0 a 100) , extension y sistema de coordenadas.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de heulla humana. Esto permitira ordenarlos posteriormente
+    "2015"= file.path(input_folder, "HumanFootprint", "IHEH_2015.tif"), # Indice de huella humana para Colombia del año 2015 IAvH
+    "2018"= file.path(input_folder, "HumanFootprint", "IHEH_2018.tif"), # Indice de huella humana para Colombia del año 2018 IAvH
+    "2019"= file.path(input_folder, "HumanFootprint", "IHEH_2019.tif")  # Indice de huella humana para Colombia del año 2019 IAvH
   ),
-  StratEcoSystemList= list( # Lista de rutas de archivos espaciales que representan ecosistemas estrategicos.
-    "Manglar"= file.path(input_folder, "strategicEcosystems", "Bioms_Manglar.gpkg"), # Biomas asociados a manglar
-    "Paramo"= file.path(input_folder, "strategicEcosystems", "Bioms_Paramo.gpkg"), # Biomas asociados a Paramo
-    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueSeco.gpkg"), # Biomas asociados a BosqueSeco
-    "BosqueHumedo"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueHumedo.gpkg") # Biomas asociados a BosqueHumedo
+  AME_List= list( # Lista de rutas de archivos espaciales que representan areas de manejo especial
+    "ResguardosIndigenas"= file.path(input_folder, "SpecialAreas", "Resguardos_ANT2024.gpkg") # Resguardos indigenas formalizados en Colombia - Agencia nacional de tierras 2024
   )
-)
+  )
 
 
 ## Cargar insumos ####
@@ -49,72 +45,85 @@ sf::sf_use_s2(F) # desactivar el uso de la biblioteca s2 para las operaciones ge
 ### Cargar area de estudio ####
 studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggregate() %>% sf::st_as_sf() # se carga y se disuleve para optimizar el analisis
 
-### Cargar ecosistemas estrategicos ####
-list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(input$StratEcoSystemList[[j]]) %>% dplyr::mutate(ZonaEcos=j) )
+### Cargar áreas de manejo especial ####
+list_AME<- pblapply(names(input$AME_List), function(j) st_read(input$AME_List[[j]]) %>% dplyr::mutate(type_AME=j) )
 
-#### Corte de ecosistemas estrategicos por area de estudio ####
-strategic_ecosystems<- pblapply(list_strategic, function(eco_strategic) {
-  test_crop_studyArea<- eco_strategic  %>%  st_crop( studyArea ) 
+#### Corte de áreas de manejo especial por area de estudio ####
+ame<- pblapply(list_AME, function(type_ame) {
+  test_crop_studyArea<- type_ame  %>%  st_crop( studyArea ) 
   test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea)  %>% as.data.frame()
-  strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,]) %>%  sf::st_set_geometry("geometry")
-})  %>% plyr::rbind.fill() %>% st_as_sf() %>% dplyr::group_by(ZonaEcos) %>%
+  ame_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,]) %>%  sf::st_set_geometry("geometry")
+})  %>% plyr::rbind.fill() %>% st_as_sf() %>% dplyr::group_by(type_AME) %>%
   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>% 
   dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
 
-### Cargar coberturas ####
-list_covs<- pblapply(input$timeNatCoverList, function(x) st_read(x)  )
-list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
+### Cargar capas de huella ####
+list_IHEH<- pblapply(input$time_IHEH_List, function(x) terra::rast(x)  )
+list_IHEH<- list_IHEH[sort(names(list_IHEH))] # ordenar por año
 
-#### Corte de coberturas por ecosistemas estrategicos en area de estudio ####
-list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( strategic_ecosystems ) %>% sf::st_set_geometry("geometry") %>%   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>%  dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop") 
-  test_intersects_studyArea<- sf::st_intersects(strategic_ecosystems, test_crop_studyArea) %>% as.data.frame()
-  NatCovs_studyArea<- sf::st_intersection(strategic_ecosystems[unique(test_intersects_studyArea$row.id),], test_crop_studyArea[unique(test_intersects_studyArea$col.id),])
+
+#### Corte de capas de huella por áreas de manejo especial en area de estudio ####
+list_IHEH_studyArea<- pblapply(list_IHEH, function(layerIHEH) {
+  layerIHEH_studyArea<- lapply(split(ame, ame$type_AME), function(x) {terra::crop(layerIHEH, x) %>% terra::mask(ame)})
 })
 
 
-## Estimar area de cobertura natural por ecosistema - periodo ####
-area_cobsNat_ecosystem <- pblapply(names(list_covs_studyArea), function(i_testArea) {
-  area_pol<-  list_covs_studyArea[[i_testArea]] %>% dplyr::mutate(period= i_testArea, area_km2= st_area(.) %>%  units::set_units("km2")) %>% 
-    st_drop_geometry() %>% dplyr::group_by(ZonaEcos, period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
-  area_pol
+## Estimar huella promedio por periodo en areas de manejo especial ####
+IHEH_typeAME <- pblapply(names(list_IHEH_studyArea), function(i_testArea) {
+  
+  huella_AME<- lapply(names(list_IHEH_studyArea[[i_testArea]]), function(y) {
+    data.frame(type_AME=y, period= i_testArea, IHEH_mean= mean(terra::values(list_IHEH_studyArea[[i_testArea]][[y]], na.rm=T)))
+  }) %>% plyr::rbind.fill()
+    
   }) %>% plyr::rbind.fill()
 
-print(area_cobsNat_periodo)
+print(IHEH_typeAME)
 
-## Estimar area de cobertura natural por  periodo ####
-area_cobsNat<- area_cobsNat_periodo %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
-print(area_cobsNat)
+## Estimar huella proemedio por  periodo ####
+IHEH_AME<- IHEH_typeAME %>% dplyr::group_by(period) %>% dplyr::summarise(IHEH_mean= as.numeric(sum(IHEH_mean, na.rm=T)))
+print(IHEH_AME)
 
 ## Estimar cambio respecto al periodo anterior y tendencia ####
-changeArea_cobsNat<- area_cobsNat %>% dplyr::mutate(changeArea= NA, perc_changeArea= NA, trend=NA)
-for(i in seq(nrow(changeArea_cobsNat)) ){
+changeIHEH_AME<- IHEH_AME %>% dplyr::mutate(changeIHEH= NA, perc_changeIHEH= NA, trend=NA)
+for(i in seq(nrow(changeIHEH_AME)) ){
 if(i>1){
-  changeArea_cobsNat[i,"changeArea"]<- changeArea_cobsNat[i,"area_km2"]  - changeArea_cobsNat[i-1,"area_km2"] # estimar cambio en extension
-  changeArea_cobsNat[i,"perc_changeArea"]<-  changeArea_cobsNat[i,"changeArea"] / changeArea_cobsNat[i-1,"area_km2"] # estimar cambio porcentual
-  changeArea_cobsNat[i,"trend"]<-  changeArea_cobsNat[i,"perc_changeArea"] + ifelse(is.na(changeArea_cobsNat[i-1,"perc_changeArea"]), 0, mean(unlist(changeArea_cobsNat[2:i-1,"perc_changeArea"]), na.rm=T)) # estimar tendencia de cambio
+  changeIHEH_AME[i,"changeIHEH"]<- changeIHEH_AME[i,"IHEH_mean"]  - changeIHEH_AME[i-1,"IHEH_mean"] # estimar cambio en extension
+  changeIHEH_AME[i,"perc_changeIHEH"]<-  changeIHEH_AME[i,"changeIHEH"] / changeIHEH_AME[i-1,"IHEH_mean"] # estimar cambio porcentual
+  changeIHEH_AME[i,"trend"]<-  changeIHEH_AME[i,"perc_changeIHEH"] + ifelse(is.na(changeIHEH_AME[i-1,"perc_changeIHEH"]), 0, mean(unlist(changeIHEH_AME[2:i-1,"perc_changeIHEH"]), na.rm=T)) # estimar tendencia de cambio
   }
 }
 
 ## Plot de cambio y tendencia ####
-changeArea_cobsNat_data<- changeArea_cobsNat %>% dplyr::mutate(period= as.numeric(period))
+changeIHEH_AME_data<- changeIHEH_AME %>% dplyr::mutate(period= as.numeric(period))
 
-changeArea_cobsNat_plotdata<- tidyr::pivot_longer(changeArea_cobsNat_data, cols = -period, names_to = "variable", values_to = "value")
+changeIHEH_AME_plotdata<- tidyr::pivot_longer(changeIHEH_AME_data, cols = -period, names_to = "variable", values_to = "value")
 
-changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value, color = variable)) +
+changeIHEH_plot<- ggplot(changeIHEH_AME_plotdata, aes(x = period, y = value, color = variable)) +
   geom_line(group = 1) +
-  geom_point() +
-  facet_wrap(~ variable, scales = "free_y") +
-  theme_minimal()
+  geom_point() + facet_wrap(~ variable, scales = "free_y") + theme_minimal()
 
-print(changeArea_plot)
+print(changeIHEH_plot)
 
 
 ## Exportar resultados
-
 # Exportar tablas
-openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
-openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+
+openxlsx::write.xlsx(IHEH_typeAME, file.path(output, paste0("IHEH_typeAME", ".xlsx")))
+openxlsx::write.xlsx(IHEH_AME, file.path(output, paste0("IHEH_AME", ".xlsx")))
+openxlsx::write.xlsx(changeIHEH_AME, file.path(output, paste0("changeIHEH_AME", ".xlsx")))
+
 # Exportar figuras
-ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+ggsave(file.path(output, paste0("results_trend", ".jpg")), changeIHEH_plot)
+
+# exportar resultados espaciales
+folder_IHEH_studyArea<- file.path(output, "IHEH_studyArea"); dir.create(folder_IHEH_studyArea)
+export_rast<- pblapply(names(list_IHEH_studyArea), function(i_testArea) {
+  layer<-  list_IHEH_studyArea[[i_testArea]]
+  dir_layer<- file.path(folder_IHEH_studyArea,i_testArea ); dir.create(dir_layer)
+  
+  lapply(names(layer), function(j) {
+    terra::writeRaster(layer[[j]], file.path(dir_layer, paste0(basename(folder_IHEH_studyArea),"_", i_testArea, "_", j, ".tif")), overwrite=T)
+  })
+  
+})
 

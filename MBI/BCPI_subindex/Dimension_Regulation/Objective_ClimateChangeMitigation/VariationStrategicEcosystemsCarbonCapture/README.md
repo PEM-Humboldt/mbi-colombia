@@ -16,24 +16,6 @@ Flujo de trabajo VariationStrategicEcosystemsCarbonCapture – Indicador
 de Variación del Área de Ecosistemas Estratégicos con Potencial de
 Captura de Carbono
 ================
-true
-
-- [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
-- [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
-  - [Cargar librerias/paquetes necesarios para el
-    análisis](#cargar-libreriaspaquetes-necesarios-para-el-análisis)
-- [Establecer entorno de trabajo](#establecer-entorno-de-trabajo)
-  - [Definir inputs y direccion
-    output](#definir-inputs-y-direccion-output)
-- [Cargar insumos](#cargar-insumos)
-- [Estimar area de cobertura natural por ecosistema -
-  periodo](#estimar-area-de-cobertura-natural-por-ecosistema---periodo)
-- [Estimar area de cobertura natural por
-  periodo](#estimar-area-de-cobertura-natural-por-periodo)
-- [Estimar cambio respecto al periodo anterior y
-  tendencia](#estimar-cambio-respecto-al-periodo-anterior-y-tendencia)
-- [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
-
 Esta rutina estima el Indicador de Variación del Área de Ecosistemas
 Estratégicos con Potencial de Captura de Carbono en Colombia. Los
 ecosistemas estratégicos en Colombia incluyen los bosques andinos, los
@@ -61,7 +43,27 @@ incluye un ejemplo para un departamento particular
 que, al ser una ventana más pequeña, facilita la validación del código.
 Si se desea estimar el indicador para otro polígono, se debe cambiar la
 ruta `input$studyArea` en la [sección de código para la definición de
-entradas](#ID_inputs)
+entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de
+cobertura por periodo y diferentes insumos de polígonos de ecosistemas
+estratégicos, siempre que se definan correctamente según lo descrito en
+la sección de entradas citada.
+
+- [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
+- [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
+  - [Cargar librerias/paquetes necesarios para el
+    análisis](#cargar-libreriaspaquetes-necesarios-para-el-análisis)
+- [Establecer entorno de trabajo](#establecer-entorno-de-trabajo)
+  - [Definir inputs y direccion
+    output](#definir-inputs-y-direccion-output)
+- [Cargar insumos](#cargar-insumos)
+- [Estimar area de cobertura natural por ecosistema -
+  periodo](#estimar-area-de-cobertura-natural-por-ecosistema---periodo)
+- [Estimar area de cobertura natural por
+  periodo](#estimar-area-de-cobertura-natural-por-periodo)
+- [Estimar cambio respecto al periodo anterior y
+  tendencia](#estimar-cambio-respecto-al-periodo-anterior-y-tendencia)
+- [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
+- [Exportar resultados](#exportar-resultados)
 
 ## Organizar directorio de trabajo
 
@@ -76,7 +78,7 @@ directorio está organizado de esta manera que facilita la ejecución del
 código:
 
     script
-    │- Script_VariationNaturalEcosystemsArea
+    │- Script_VariationStrategicEcosystemsCarbonCapture
     │    
     └-input
     │ │
@@ -89,7 +91,7 @@ código:
     │ │   │
     │ │   │- StratEcoSystem_1.gpkg
     │ │   │- ...
-    │ │   │- StratEcoSystem_2.gpkg
+    │ │   │- StratEcoSystem_n.gpkg
     │ │
     │ │
     │ └- covs
@@ -172,7 +174,7 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
@@ -239,8 +241,8 @@ list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(i
 #### Corte de ecosistemas estrategicos por area de estudio ####
 strategic_ecosystems<- pblapply(list_strategic, function(eco_strategic) {
   test_crop_studyArea<- eco_strategic  %>%  st_crop( studyArea )
-  test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>%  sf::st_set_geometry("geometry") %>% as.data.frame()
-  strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
+  strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,]) %>%  sf::st_set_geometry("geometry")
 })  %>% plyr::rbind.fill() %>% st_as_sf() %>% dplyr::group_by(ZonaEcos) %>%
   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>% 
   dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
@@ -281,7 +283,7 @@ area_cobsNat_ecosystem <- pblapply(names(list_covs_studyArea), function(i_testAr
   area_pol
   }) %>% plyr::rbind.fill()
 
-print(area_cobsNat_periodo)
+print(area_cobsNat_ecosystem)
 ```
 
 ## Estimar area de cobertura natural por periodo
@@ -293,9 +295,17 @@ una operación de agrupación y suma de las áreas calculadas de cobertura
 natural de ecosistemas estrategicos para cada período.
 
 ``` r
-area_cobsNat<- area_cobsNat_periodo %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
+## Estimar area de cobertura natural por  periodo ####
+area_cobsNat<- area_cobsNat_ecosystem %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
 print(area_cobsNat)
 ```
+
+| period | area_km2 |
+|:-------|---------:|
+| 2002   | 579873.8 |
+| 2009   | 567205.9 |
+| 2012   | 567777.1 |
+| 2018   | 580355.0 |
 
 ## Estimar cambio respecto al periodo anterior y tendencia
 
@@ -331,6 +341,13 @@ if(i>1){
 print(changeArea_cobsNat)
 ```
 
+| period | area_km2 |  changeArea | perc_changeArea |      trend |
+|:-------|---------:|------------:|----------------:|-----------:|
+| 2002   | 579873.8 |          NA |              NA |         NA |
+| 2009   | 567205.9 | -12667.8660 |      -0.0218459 | -0.0218459 |
+| 2012   | 567777.1 |    571.2085 |       0.0010071 | -0.0208388 |
+| 2018   | 580355.0 |  12577.8730 |       0.0221528 |  0.0117334 |
+
 ## Plot de cambio y tendencia
 
 Por ultimo se ajustaron los resultados para visualización que permita
@@ -354,13 +371,32 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 ```
 
-![](README_figures/results_trend.png)
+![](README_figures/results_trend_Colombia.jpg)
 
 Las áreas estimadas por periodos se presentan como valores absolutos, el
 cambio en área como el delta entre los periodos comparados, mientras que
 el porcentaje de cambio de área y la tendencia se representan en una
 escala entre -1 y 1. En esta escala, -1 representa una pérdida de
-extensión de coberturas naturales en ecosistemas continentales, y 1
-indica que se mantuvo o se superó la extensión de referencia. Esto
-permite una interpretación clara y directa de los cambios y tendencias
-en la extensión de los ecosistemas naturales a lo largo del tiempo.
+extensión de coberturas naturales en ecosistemas estrategicos con
+potencial captura de carbono, y 1 indica que se mantuvo o se superó la
+extensión de referencia. Esto permite una interpretación clara y directa
+de los cambios y tendencias en la extensión de los ecosistemas
+estrateficos con potencial captura de carbono a lo largo del tiempo.
+
+## Exportar resultados
+
+``` r
+## Exportar resultados
+# Exportar tablas
+openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
+openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+# Exportar figuras
+ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+
+# exportar resultados espaciales
+folder_cobsNat_ecosystem<- file.path(output, "cobsNat_ecosystem"); dir.create(folder_cobsNat_ecosystem)
+export_pol<- pblapply(names(list_covs_studyArea), function(i_testArea) {
+  pol<-  list_covs_studyArea[[i_testArea]]
+  sf::st_write(pol, file.path(folder_cobsNat_ecosystem, paste0(basename(folder_cobsNat_ecosystem), "_", i_testArea, ".gpkg")), delete_dsn=T)
+})
+```

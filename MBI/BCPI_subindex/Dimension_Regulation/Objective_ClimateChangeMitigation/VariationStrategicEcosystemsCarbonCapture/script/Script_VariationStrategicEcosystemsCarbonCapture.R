@@ -25,7 +25,7 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
@@ -80,10 +80,10 @@ area_cobsNat_ecosystem <- pblapply(names(list_covs_studyArea), function(i_testAr
   area_pol
   }) %>% plyr::rbind.fill()
 
-print(area_cobsNat_periodo)
+print(area_cobsNat_ecosystem)
 
 ## Estimar area de cobertura natural por  periodo ####
-area_cobsNat<- area_cobsNat_periodo %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
+area_cobsNat<- area_cobsNat_ecosystem %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
 print(area_cobsNat)
 
 ## Estimar cambio respecto al periodo anterior y tendencia ####
@@ -110,11 +110,22 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 
 
-## Exportar resultados
-
+## Exportar resultados ####
 # Exportar tablas
+openxlsx::write.xlsx(area_cobsNat_ecosystem, file.path(output, paste0("area_cobsNat_ecosystem", ".xlsx")))
 openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
 openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+
 # Exportar figuras
 ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+
+# exportar resultados espaciales
+folder_cobsNat_ecosystem<- file.path(output, "cobsNat_ecosystem"); dir.create(folder_cobsNat_ecosystem)
+export_pol<- pblapply(names(list_covs_studyArea), function(i_testArea) {
+  pol<-  list_covs_studyArea[[i_testArea]]
+  sf::st_write(pol, file.path(folder_cobsNat_ecosystem, paste0(basename(folder_cobsNat_ecosystem), "_", i_testArea, ".gpkg")), delete_dsn=T)
+})
+
+
+
 

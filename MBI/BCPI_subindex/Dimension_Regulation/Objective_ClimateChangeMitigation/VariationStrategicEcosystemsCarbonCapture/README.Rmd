@@ -156,7 +156,7 @@ list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
 
 Una vez cargados los insumos del área de estudio y los ecosistemas estratégicos, además de las coberturas naturales en diferentes períodos de tiempo, se realiza el corte de los mapas de coberturas naturales por ecosistemas estratégicos en el área de estudio. El objeto list_covs_studyArea corresponde a la representación espacial de esa intersección.
 
-## Estimar area de cobertura natural por ecosistema - periodo ####
+## Estimar area de cobertura natural por ecosistema - periodo
 Con los insumos ajustados al área de estudio, para estimar la variación de la extensión es necesario calcular el área de las coberturas naturales por ecosistema estratégico en el área de estudio. Se calcula el área de coberturas naturales por ecosistema estratégico en km² para cada período y se almacena en tablas de área por ecosistema estratégico por período.
 
 ```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
@@ -167,14 +167,21 @@ area_cobsNat_ecosystem <- pblapply(names(list_covs_studyArea), function(i_testAr
   area_pol
   }) %>% plyr::rbind.fill()
 
-print(area_cobsNat_periodo)
+print(area_cobsNat_ecosystem)
 ```
 
-## Estimar area de cobertura natural por  periodo ####
+```{r,  eval= T, echo=F, warning= F, message = F, attr.output='style="max-height: 10px;"'}
+output<- "C:/Repositories/MBI_Colombia/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture/script/output_Colombia"
+area_cobsNat_ecosystem<- openxlsx::read.xlsx( file.path(output, paste0("area_cobsNat_ecosystem", ".xlsx"))) 
+knitr::kable(area_cobsNat_ecosystem)
+```
+
+## Estimar area de cobertura natural por  periodo
 Si bien es valiosa la información por cada tipo de ecosistema estratégico, el indicador busca estimarse por la totalidad de ecosistemas estratégicos en el área de estudio. Para ello, se realiza una operación de agrupación y suma de las áreas calculadas de cobertura natural de ecosistemas estrategicos para cada período.
 
 ```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
-area_cobsNat<- area_cobsNat_periodo %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
+## Estimar area de cobertura natural por  periodo ####
+area_cobsNat<- area_cobsNat_ecosystem %>% dplyr::group_by(period) %>% dplyr::summarise(area_km2= as.numeric(sum(area_km2, na.rm=T)))
 print(area_cobsNat)
 ```
 
@@ -184,7 +191,7 @@ area_cobsNat<- openxlsx::read.xlsx( file.path(output, paste0("area_cobsNat", ".x
 knitr::kable(area_cobsNat)
 ```
 
-## Estimar cambio respecto al periodo anterior y tendencia ####
+## Estimar cambio respecto al periodo anterior y tendencia
 Esta información permite realizar un seguimiento de las variaciones en la extensión de los ecosistemas estrategicos con potencial captura de carbono a lo largo del tiempo. Nuestro objetivo es estandarizar esa variación en un índice. Para ello, procedemos a estimar el cambio respecto a un periodo definido. En este caso, estimamos el cambio y el porcentaje de cambio de extensión respecto al último periodo anterior de medición, utilizando la fórmula de cambio: periodo anterior - periodo actual, y el porcentaje como el cambio sobre el periodo anterior.
 
 ![](README_figures/ecuaciones_tendencia.png)
@@ -231,6 +238,24 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 ```
 
-![](README_figures/results_trend.png)
+![](README_figures/results_trend_Colombia.jpg)
 
 Las áreas estimadas por periodos se presentan como valores absolutos, el cambio en área como el delta entre los periodos comparados, mientras que el porcentaje de cambio de área y la tendencia se representan en una escala entre -1 y 1. En esta escala, -1 representa una pérdida de extensión de coberturas naturales en ecosistemas estrategicos con potencial captura de carbono, y 1 indica que se mantuvo o se superó la extensión de referencia. Esto permite una interpretación clara y directa de los cambios y tendencias en la extensión de los ecosistemas estrateficos con potencial captura de carbono a lo largo del tiempo.
+
+## Exportar resultados
+```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
+## Exportar resultados
+# Exportar tablas
+openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
+openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+# Exportar figuras
+ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+
+# exportar resultados espaciales
+folder_cobsNat_ecosystem<- file.path(output, "cobsNat_ecosystem"); dir.create(folder_cobsNat_ecosystem)
+export_pol<- pblapply(names(list_covs_studyArea), function(i_testArea) {
+  pol<-  list_covs_studyArea[[i_testArea]]
+  sf::st_write(pol, file.path(folder_cobsNat_ecosystem, paste0(basename(folder_cobsNat_ecosystem), "_", i_testArea, ".gpkg")), delete_dsn=T)
+})
+
+```
