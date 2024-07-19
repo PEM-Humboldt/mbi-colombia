@@ -44,7 +44,7 @@ Las rutinas acá documentadas son:
       vida](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
       - [Indicador de la variación en la huella humana en áreas de
         manejo
-        especial](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
+        especial](./MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife/VariationHumanFootprintSpecialAreas)
 
 ## Referencias
 
