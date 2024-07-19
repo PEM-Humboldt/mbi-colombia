@@ -48,9 +48,9 @@ list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
 
 #### Corte de coberturas por area de estudio ####
 list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea )
+  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea ) %>% sf::st_set_geometry("geometry") %>%   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>%  dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
   test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
-  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id),], test_crop_studyArea[unique(test_intersects_studyArea$col.id),])
 })
 
 ## Estimar area por periodo ####

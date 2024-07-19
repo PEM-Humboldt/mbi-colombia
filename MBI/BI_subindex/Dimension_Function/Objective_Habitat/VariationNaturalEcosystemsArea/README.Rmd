@@ -12,12 +12,16 @@ output:
     toc_depth: 6
 ---
 Esta rutina está diseñada para estimar el Indicador de Variación del Área de Ecosistemas Naturales Continentales en Colombia. Esto refleja la importancia de los hábitats continentales como factores vinculados a la estabilidad y función de los ecosistemas. Los cambios en el área de los ecosistemas naturales afectan directamente la capacidad de estos sistemas para mantener el flujo de procesos y la funcionalidad que los caracteriza.
+
 Este índice proporciona información sobre los cambios en la extensión de coberturas naturales en ecosistemas naturales continentales, midiendo específicamente las variaciones de extensión respecto a un tiempo de referencia. La temporalidad de reporte de este índice es irregular, ya que depende de la actualización del insumo de coberturas naturales continentales para Colombia.
+
+El ejemplo documentado estima genera resultados para el área total de Colombia (`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`). Sin embargo, el código está diseñado para estimar el indicador en cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto incluye un ejemplo para un departamento particular (`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`), que, al ser una ventana más pequeña, facilita la validación del código. Si se desea estimar el indicador para otro polígono, se debe cambiar la ruta `input$studyArea` en la [sección de código para la definición de entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de cobertura por periodo y diferentes insumos de polígonos de ecosistemas estratégicos, siempre que se definan correctamente según lo descrito en la sección de entradas citada.
+
 
 ## Organizar directorio de trabajo
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationNaturalEcosystemsArea/scripts](https://drive.google.com/open?id=1-kNyyptInMkeqaK5MGcMekZ0J49U-gJd&usp=drive_fs). Están organizadas de esta manera que facilita la ejecución del código:
+Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationNaturalEcosystemsArea/scripts](https://drive.google.com/open?id=1-kNyyptInMkeqaK5MGcMekZ0J49U-gJd&usp=drive_fs). Una vez descargadas, reemplaza la carpeta "input" en el directorio donde está guardado este código con la carpeta "input" de la descarga. El directorio está organizado de esta manera que facilita la ejecución del código:
 
 ```
 script
@@ -71,6 +75,7 @@ Asimismo, el código genera una carpeta output donde se almacenarán los resulta
 
 Este código ejecuta una serie de análisis espaciales a partir de polígonos. Es fundamental que los insumos sean polígonos y utilicen un sistema de coordenadas coherente. Todas las entradas espaciales deben tener el mismo sistema de coordenadas. En este flujo de trabajo, toda la información cartográfica se maneja en el sistema de coordenadas WGS84 (EPSG:4326). El código puede ejecutarse en cualquier sistema de coordenadas, siempre y cuando todos los insumos espaciales tengan la misma proyección. Se pueden usar distintos tipos de vectores espaciales (por ejemplo, .gpkg, .geoJson, .shp). En este ejemplo, se utiliza .gpkg por ser el más eficiente para análisis espaciales.
 
+<a id="ID_inputs"></a>
 ```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
 ### Definir entradas necesarias para la ejecución del análisis ####
 
@@ -111,10 +116,11 @@ list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
 
 #### Corte de coberturas por area de estudio ####
 list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea )
+  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea ) %>% sf::st_set_geometry("geometry") %>%   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>%  dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
   test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
-  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id),], test_crop_studyArea[unique(test_intersects_studyArea$col.id),])
 })
+
 ```
 
 Una vez cargados los insumos del área de estudio y las coberturas naturales en diferentes períodos de tiempo, se realiza el corte de esos mapas de coberturas naturales por el área de estudio. El objeto `list_covs_studyArea` corresponde a la representación espacial de esa intersección.
@@ -133,7 +139,7 @@ print(area_cobsNat)
 ```
 
 ```{r,  eval= T, echo=F, warning= F, message = F, attr.output='style="max-height: 10px;"'}
-output<- "C:/Repositories/MBI_Colombia/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea/script/output"
+output<- "C:/Repositories/MBI_Colombia/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea/script/output_Colombia"
 area_cobsNat<- openxlsx::read.xlsx( file.path(output, paste0("area_cobsNat", ".xlsx"))) 
 knitr::kable(area_cobsNat)
 ```
@@ -161,7 +167,7 @@ print(changeArea_cobsNat)
 
 
 ```{r,  eval= T, echo=F, warning= F, message = F, attr.output='style="max-height: 10px;"'}
-output<- "C:/Repositories/MBI_Colombia/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea/script/output"
+output<- "C:/Repositories/MBI_Colombia/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea/script/output_Colombia"
 changeArea_cobsNat<- openxlsx::read.xlsx( file.path(output, paste0("changeArea_cobsNat", ".xlsx"))) 
 knitr::kable(changeArea_cobsNat)
 ```
@@ -185,7 +191,7 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 ```
 
-![](README_figures/results_trend.jpg)
+![](README_figures/results_trend_Colombia.jpg)
 
 Las áreas estimadas por periodos se presentan como valores absolutos, el cambio en área como el delta entre los periodos comparados, mientras que el porcentaje de cambio de área y la tendencia se representan en una escala entre -1 y 1. En esta escala, -1 representa una pérdida de extensión de coberturas naturales en ecosistemas continentales, y 1 indica que se mantuvo o se superó la extensión de referencia. Esto permite una interpretación clara y directa de los cambios y tendencias en la extensión de los ecosistemas naturales a lo largo del tiempo.
 

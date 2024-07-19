@@ -15,18 +15,36 @@ output:
 Flujo de trabajo VariationNaturalEcosystemsArea – Indicador de variación
 del área de ecosistemas naturales continentales en Colombia
 ================
+
 Esta rutina está diseñada para estimar el Indicador de Variación del
 Área de Ecosistemas Naturales Continentales en Colombia. Esto refleja la
 importancia de los hábitats continentales como factores vinculados a la
 estabilidad y función de los ecosistemas. Los cambios en el área de los
 ecosistemas naturales afectan directamente la capacidad de estos
 sistemas para mantener el flujo de procesos y la funcionalidad que los
-caracteriza. Este índice proporciona información sobre los cambios en la
-extensión de coberturas naturales en ecosistemas naturales
-continentales, midiendo específicamente las variaciones de extensión
-respecto a un tiempo de referencia. La temporalidad de reporte de este
-índice es irregular, ya que depende de la actualización del insumo de
-coberturas naturales continentales para Colombia.
+caracteriza.
+
+Este índice proporciona información sobre los cambios en la extensión de
+coberturas naturales en ecosistemas naturales continentales, midiendo
+específicamente las variaciones de extensión respecto a un tiempo de
+referencia. La temporalidad de reporte de este índice es irregular, ya
+que depende de la actualización del insumo de coberturas naturales
+continentales para Colombia.
+
+El ejemplo documentado estima genera resultados para el área total de
+Colombia
+(`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`).
+Sin embargo, el código está diseñado para estimar el indicador en
+cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto
+incluye un ejemplo para un departamento particular
+(`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`),
+que, al ser una ventana más pequeña, facilita la validación del código.
+Si se desea estimar el indicador para otro polígono, se debe cambiar la
+ruta `input$studyArea` en la [sección de código para la definición de
+entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de
+cobertura por periodo y diferentes insumos de polígonos de ecosistemas
+estratégicos, siempre que se definan correctamente según lo descrito en
+la sección de entradas citada.
 
 - [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
 - [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
@@ -47,7 +65,10 @@ coberturas naturales continentales para Colombia.
 Las entradas de ejemplo de este ejercicio están almacenadas en
 [IAvH/Unidades
 compartidas/MBI/VariationNaturalEcosystemsArea/scripts](https://drive.google.com/open?id=1-kNyyptInMkeqaK5MGcMekZ0J49U-gJd&usp=drive_fs).
-Están organizadas de esta manera que facilita la ejecución del código:
+Una vez descargadas, reemplaza la carpeta “input” en el directorio donde
+está guardado este código con la carpeta “input” de la descarga. El
+directorio está organizado de esta manera que facilita la ejecución del
+código:
 
     script
     │- Script_VariationNaturalEcosystemsArea
@@ -125,6 +146,8 @@ misma proyección. Se pueden usar distintos tipos de vectores espaciales
 (por ejemplo, .gpkg, .geoJson, .shp). En este ejemplo, se utiliza .gpkg
 por ser el más eficiente para análisis espaciales.
 
+<a id="ID_inputs"></a>
+
 ``` r
 ### Definir entradas necesarias para la ejecución del análisis ####
 
@@ -176,9 +199,9 @@ list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
 
 #### Corte de coberturas por area de estudio ####
 list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea )
+  test_crop_studyArea<- NatCovs  %>%  st_crop( studyArea ) %>% sf::st_set_geometry("geometry") %>%   dplyr::summarise(across(geometry, ~ sf::st_combine(.)), .groups = "keep") %>%  dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
   test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
-  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  NatCovs_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id),], test_crop_studyArea[unique(test_intersects_studyArea$col.id),])
 })
 ```
 
@@ -274,7 +297,7 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 ```
 
-![](README_figures/results_trend.jpg)
+![](README_figures/results_trend_Colombia.jpg)
 
 Las áreas estimadas por periodos se presentan como valores absolutos, el
 cambio en área como el delta entre los periodos comparados, mientras que

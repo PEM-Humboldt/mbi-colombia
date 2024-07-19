@@ -1,5 +1,5 @@
 ---
-title: "Flujo de trabajo VariationStrategicEcosystemsCarbonCapture – Indicador de Variación del Área de Ecosistemas Estratégicos con Potencial de Captura de Carbono"
+title: "Flujo de trabajo VariationHumanFootprintSpecialAreas – Indicador de Variación en la huella humana en áreas de manejo especial en Colombia"
 author: 
   - name: "Rincon-Parra VJ"
     email: "rincon-v@javeriana.edu.co"
@@ -12,21 +12,22 @@ output:
     toc_depth: 6
 ---
 
-Esta rutina estima el Indicador de Variación del Área de Ecosistemas Estratégicos con Potencial de Captura de Carbono en Colombia. Los ecosistemas estratégicos en Colombia incluyen los bosques andinos, los bosques secos, los humedales, los páramos y los manglares, que desempeñan un papel fundamental en la captura y almacenamiento de carbono por su capacidad de absorber CO2 de la atmósfera y almacenarlo en la biomasa y el suelo, contribuyendo así a la regulación del ciclo del carbono y la mitigación del cambio climático.
+Esta rutina está diseñada para estimar el Indicador de Variación en la huella humana en áreas de manejo especial en Colombia. Esto refleja información sobre los cambios en la presión y el impacto de las actividades humanas en zonas que, aunque no están diseñadas para la conservación de la biodiversidad, son gestionadas con el propósito de asegurar el bienestar de las comunidades locales. Las áreas de manejo especial tienen como objetivo principal mejorar la calidad de vida de las comunidades que las habitan. Sin embargo, el bienestar de estas comunidades está estrechamente vinculado a la salud y diversidad del entorno natural que las rodea.
 
-Bajo esta idea, cuantificar las variaciones de extensión de estos ecosistemas brinda información sobre su capacidad para seguir capturando carbono. Este índice mide los cambios en la extensión de coberturas naturales en las zonas delimitadas como ecosistemas estratégicos en Colombia. De manera que se describen tendencias de pérdida o ganancia de áreas naturales de estos ecosistemas, lo cual es fundamental para entender y mantener su potencial de captura de carbono.
+Proporciona información sobre cómo los cambios en la presión y el impacto de las actividades humanas están ejerciendo presión sobre la biodiversidad en estas áreas. Al hacerlo, se puede entender mejor cómo estas presiones afectan la capacidad del entorno para continuar brindando los servicios necesarios para el bienestar de las comunidades locales.
 
-El ejemplo documentado estima genera resultados para el área total de Colombia (`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`). Sin embargo, el código está diseñado para estimar el indicador en cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto incluye un ejemplo para un departamento particular (`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`), que, al ser una ventana más pequeña, facilita la validación del código. Si se desea estimar el indicador para otro polígono, se debe cambiar la ruta `input$studyArea` en la [sección de código para la definición de entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de cobertura por periodo y diferentes insumos de polígonos de ecosistemas estratégicos, siempre que se definan correctamente según lo descrito en la sección de entradas citada.
+
+El ejemplo documentado estima genera resultados para las zonas de manejo especial en el área total de Colombia (`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`). Sin embargo, el código está diseñado para estimar el indicador en cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto incluye un ejemplo para un departamento particular (`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`), que, al ser una ventana más pequeña, facilita la validación del código. Si se desea estimar el indicador para otro polígono, se debe cambiar la ruta `input$studyArea` en la [sección de código para la definición de entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de huella por periodo y diferentes insumos de polígonos de zonas de manejo especial, siempre que se definan correctamente según lo descrito en la sección de entradas citada.
 
 
 ## Organizar directorio de trabajo
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationStrategicEcosystemsCarbonCapture](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs). Una vez descargadas, reemplaza la carpeta "input" en el directorio donde está guardado este código con la carpeta "input" de la descarga. El directorio está organizado de esta manera que facilita la ejecución del código:
+Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationHumanFootprintSpecialAreas](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs). Una vez descargadas, reemplaza la carpeta "input" en el directorio donde está guardado este código con la carpeta "input" de la descarga. El directorio está organizado de esta manera que facilita la ejecución del código:
 
 ```
 script
-│- Script_VariationStrategicEcosystemsCarbonCapture
+│- Script_VariationHumanFootprintSpecialAreas
 │    
 └-input
 │ │
@@ -35,18 +36,18 @@ script
 │ │   │- studyArea.gpkg
 │ │
 │ │
-│ └- strategicEcosystems
+│ └- SpecialAreas
 │ │   │
-│ │   │- StratEcoSystem_1.gpkg
+│ │   │- SpecialAreas_1.gpkg
 │ │   │- ...
-│ │   │- StratEcoSystem_n.gpkg
+│ │   │- SpecialAreas_n.gpkg
 │ │
 │ │
-│ └- covs
+│ └- HumanFootprint
 │     │
-│     │- NatCovs_tiempo_1.gpkg
+│     │- HumanFootprint_tiempo_1.gpkg
 │     │- ...
-│     │- NatCovs_tiempo_n.gpkg
+│     │- HumanFootprint_tiempo_n.gpkg
 │     
 └-output
 ```
@@ -178,12 +179,6 @@ area_cobsNat<- area_cobsNat_periodo %>% dplyr::group_by(period) %>% dplyr::summa
 print(area_cobsNat)
 ```
 
-```{r,  eval= T, echo=F, warning= F, message = F, attr.output='style="max-height: 10px;"'}
-output<- "C:/Repositories/MBI_Colombia/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture/script/output_Colombia"
-area_cobsNat<- openxlsx::read.xlsx( file.path(output, paste0("area_cobsNat", ".xlsx"))) 
-knitr::kable(area_cobsNat)
-```
-
 ## Estimar cambio respecto al periodo anterior y tendencia ####
 Esta información permite realizar un seguimiento de las variaciones en la extensión de los ecosistemas estrategicos con potencial captura de carbono a lo largo del tiempo. Nuestro objetivo es estandarizar esa variación en un índice. Para ello, procedemos a estimar el cambio respecto a un periodo definido. En este caso, estimamos el cambio y el porcentaje de cambio de extensión respecto al último periodo anterior de medición, utilizando la fórmula de cambio: periodo anterior - periodo actual, y el porcentaje como el cambio sobre el periodo anterior.
 
@@ -204,12 +199,6 @@ if(i>1){
   }
 }
 print(changeArea_cobsNat)
-```
-
-```{r,  eval= T, echo=F, warning= F, message = F, attr.output='style="max-height: 10px;"'}
-output<- "C:/Repositories/MBI_Colombia/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture/script/output_Colombia"
-changeArea_cobsNat<- openxlsx::read.xlsx( file.path(output, paste0("changeArea_cobsNat", ".xlsx"))) 
-knitr::kable(changeArea_cobsNat)
 ```
 
 ## Plot de cambio y tendencia ####
