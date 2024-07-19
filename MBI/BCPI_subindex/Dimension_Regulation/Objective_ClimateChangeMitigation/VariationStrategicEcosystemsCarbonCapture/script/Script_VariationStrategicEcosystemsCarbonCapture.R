@@ -53,17 +53,11 @@ studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggrega
 list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(input$StratEcoSystemList[[j]]) %>% dplyr::mutate(ZonaEcos=j) )
 
 #### Corte de ecosistemas estrategicos por area de estudio ####
-list_strategics_studyArea<- pblapply(list_strategic, function(eco_strategic) {
+strategic_ecosystems<- pblapply(list_strategic, function(eco_strategic) {
   test_crop_studyArea<- eco_strategic  %>%  st_crop( studyArea )
   test_intersects_studyArea<- sf::st_intersects(studyArea, test_crop_studyArea) %>% as.data.frame()
   strategics_studyArea<- st_intersection(studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
-  })
-
-sf_union <- do.call(st_union, sf_list)
-
-aa<- 
-
-
+  }) %>% {do.call(sf::st_union, .) } %>%  terra::vect() %>% terra::buffer(0) %>% terra::aggregate() %>% sf::st_as_sf()
 
 
 ### Cargar coberturas ####
@@ -72,20 +66,10 @@ list_covs<- list_covs[sort(names(list_covs))] # ordenar por año
 
 #### Corte de coberturas por ecosistemas estrategicos en area de estudio ####
 list_covs_studyArea<- pblapply(list_covs, function(NatCovs) {
-  test_crop_studyArea<- NatCovs  %>%  st_crop( list_strategics_studyArea ) %>% sf::st_set_geometry("geometry")
-  test_intersects_studyArea<- sf::st_intersects(list_strategics_studyArea, test_crop_studyArea)
-  
-  
-  %>% as.data.frame()
-  NatCovs_studyArea<- st_intersection(list_strategics_studyArea[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
+  test_crop_studyArea<- NatCovs  %>%  st_crop( strategic_ecosystems ) %>% sf::st_set_geometry("geometry")
+  test_intersects_studyArea<- sf::st_intersects(strategic_ecosystems, test_crop_studyArea) %>% as.data.frame()
+  NatCovs_studyArea<- sf::st_intersection(strategic_ecosystems[unique(test_intersects_studyArea$row.id)], test_crop_studyArea[test_intersects_studyArea$col.id,])
 })
-
-
-
-
-
-
-
 
 
 ## Estimar area por periodo ####
@@ -120,4 +104,11 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value,
 print(changeArea_plot)
 
 
-## Exportar resultados ####
+## Exportar resultados
+
+# Exportar tablas
+openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
+openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+# Exportar figuras
+ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
+

@@ -16,7 +16,6 @@ Esta rutina estima el Indicador de Variación del Área de Ecosistemas Estratég
 
 Bajo esta idea, cuantificar las variaciones de extensión de estos ecosistemas brinda información sobre su capacidad para seguir capturando carbono. Este índice mide los cambios en la extensión de coberturas naturales en las zonas delimitadas como ecosistemas estratégicos en Colombia. De manera que se describen tendencias de pérdida o ganancia de áreas naturales de estos ecosistemas, lo cual es fundamental para entender y mantener su potencial de captura de carbono.
 
-
 ## Organizar directorio de trabajo
 <a id="ID_seccion1"></a>
 
