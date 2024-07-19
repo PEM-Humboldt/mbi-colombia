@@ -21,33 +21,30 @@ MBI.
 Las rutinas acá documentadas son:
 
 - [Subíndice BI](./MBI/BI_subindex)
-  - [Dimensión
-    Diversidad](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Diversity)
+  - [Dimensión Diversidad](./BI_subindex/Dimension_Diversity)
     - [Objetivo
-      Genético](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Diversity/Objective_Genetic)
+      Genético](./BI_subindex/Dimension_Diversity/Objective_Genetic)
       - [Indicador genético del estado de
-        poblaciones](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Diversity/Objective_Genetic/GeneticStatePopulations)
-  - [Dimensión
-    Función](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Function)
+        poblaciones](./BI_subindex/Dimension_Diversity/Objective_Genetic/GeneticStatePopulations)
+  - [Dimensión Función](./BI_subindex/Dimension_Function)
     - [Objetivo
-      Hábitat](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Function/Objective_Habitat)
+      Hábitat](./BI_subindex/Dimension_Function/Objective_Habitat)
       - [Indicador de variación del área de ecosistemas naturales
-        continentales](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea)
-- [Subíndice
-  BCPI](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex)
-  - [Dimensión
-    Regulación](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_Regulation)
+        continentales](./BI_subindex/Dimension_Function/Objective_Habitat/VariationNaturalEcosystemsArea)
+- [Subíndice BCPI](./BCPI_subindex)
+  - [Dimensión Regulación](./BCPI_subindex/Dimension_Regulation)
     - [Objetivo Mitigación del Cambio
-      Climático](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation)
+      Climático](./BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation)
       - [Indicador de variación en la extensión de ecosistemas
         estratégicos con potencial de captura de
-        carbono](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
+        carbono](./BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture)
   - [Dimensión No Material o
-    Intangible](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_NonMaterialIntangible)
+    Intangible](./BCPI_subindex/Dimension_NonMaterialIntangible)
     - [Objetivo Salud y Calidad de
-      vida](https://github.com/vicjulrin/MBI_Colombia/tree/main/MBI/BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
+      vida](./BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife)
       - [Indicador de la variación en la huella humana en áreas de
-        manejo especial]()
+        manejo
+        especial](./BCPI_subindex/Dimension_NonMaterialIntangible/Objective_HealthQualityLife/VariationHumanFootprintSpecialAreas)
 
 ## Referencias
 
