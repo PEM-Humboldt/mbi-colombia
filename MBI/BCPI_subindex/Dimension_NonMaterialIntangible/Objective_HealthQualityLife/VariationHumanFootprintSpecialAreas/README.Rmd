@@ -218,7 +218,7 @@ knitr::kable(changeIHEH_AME)
 
 ## Plot de cambio y tendencia
 
-Por ultimo se ajustaron los resultados para visualización que permita entender las tendencias obtenidas. Esto permite observar los cambios en la extensión de los ecosistemas naturales y su tendencia acumulativa, lo que facilita la interpretación de los datos y apoya la toma de decisiones en la gestión de los recursos naturales.
+Por ultimo se ajustaron los resultados para visualización que permita entender las tendencias obtenidas. Esto permite observar los cambios en el indice de huella humana a traves del tiempo.
 
 ```{r,  eval=F, echo=T, results='hide', warning= F, message = F}
 ## Plot de cambio y tendencia ####

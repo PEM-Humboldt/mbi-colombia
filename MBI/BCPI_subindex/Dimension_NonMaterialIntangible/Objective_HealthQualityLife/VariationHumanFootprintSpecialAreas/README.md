@@ -65,6 +65,7 @@ sección de entradas citada.
 - [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
 - [Exportar resultados](#exportar-resultados)
 
+
 ## Organizar directorio de trabajo
 
 <a id="ID_seccion1"></a>
@@ -337,9 +338,7 @@ print(changeIHEH_AME)
 
 Por ultimo se ajustaron los resultados para visualización que permita
 entender las tendencias obtenidas. Esto permite observar los cambios en
-la extensión de los ecosistemas naturales y su tendencia acumulativa, lo
-que facilita la interpretación de los datos y apoya la toma de
-decisiones en la gestión de los recursos naturales.
+el indice de huella humana a traves del tiempo.
 
 ``` r
 ## Plot de cambio y tendencia ####
