@@ -23,7 +23,7 @@ El ejemplo documentado estima genera resultados para las zonas de manejo especia
 ## Organizar directorio de trabajo
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationHumanFootprintSpecialAreas](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs). Una vez descargadas, reemplaza la carpeta "input" en el directorio donde está guardado este código con la carpeta "input" de la descarga. El directorio está organizado de esta manera que facilita la ejecución del código:
+Las entradas de ejemplo de este ejercicio están almacenadas en [IAvH/Unidades compartidas/MBI/VariationHumanFootprintSpecialAreas](https://drive.google.com/open?id=18Bs1g79OWTwYBjLeMvi-MdIKRmk3o33B&usp=drive_fs). Una vez descargadas, reemplaza la carpeta "input" en el directorio donde está guardado este código con la carpeta "input" de la descarga. El directorio está organizado de esta manera que facilita la ejecución del código:
 
 ```
 script

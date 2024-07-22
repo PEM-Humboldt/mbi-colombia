@@ -15,6 +15,7 @@ output:
 Flujo de trabajo VariationHumanFootprintSpecialAreas – Indicador de
 Variación en la huella humana en áreas de manejo especial en Colombia
 ================
+
 Esta rutina está diseñada para estimar el Indicador de Variación en la
 huella humana en áreas de manejo especial en Colombia. Esto refleja
 información sobre los cambios en la presión y el impacto de las
@@ -33,21 +34,6 @@ estas presiones afectan la capacidad del entorno para continuar
 brindando los servicios necesarios para el bienestar de las comunidades
 locales.
 
-El ejemplo documentado estima genera resultados para las zonas de manejo
-especial en el área total de Colombia
-(`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`).
-Sin embargo, el código está diseñado para estimar el indicador en
-cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto
-incluye un ejemplo para un departamento particular
-(`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`),
-que, al ser una ventana más pequeña, facilita la validación del código.
-Si se desea estimar el indicador para otro polígono, se debe cambiar la
-ruta `input$studyArea` en la [sección de código para la definición de
-entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de
-huella por periodo y diferentes insumos de polígonos de zonas de manejo
-especial, siempre que se definan correctamente según lo descrito en la
-sección de entradas citada.
-
 - [Organizar directorio de trabajo](#organizar-directorio-de-trabajo)
 - [Establecer parámetros de sesión](#establecer-parámetros-de-sesión)
   - [Cargar librerias/paquetes necesarios para el
@@ -65,6 +51,20 @@ sección de entradas citada.
 - [Plot de cambio y tendencia](#plot-de-cambio-y-tendencia)
 - [Exportar resultados](#exportar-resultados)
 
+El ejemplo documentado estima genera resultados para las zonas de manejo
+especial en el área total de Colombia
+(`input$studyArea = file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"`).
+Sin embargo, el código está diseñado para estimar el indicador en
+cualquier polígono espacial de Colombia. Por ejemplo, el script adjunto
+incluye un ejemplo para un departamento particular
+(`input$studyArea = file.path(input_folder, "studyArea", "antioquia.shp"`),
+que, al ser una ventana más pequeña, facilita la validación del código.
+Si se desea estimar el indicador para otro polígono, se debe cambiar la
+ruta `input$studyArea` en la [sección de código para la definición de
+entradas](#ID_inputs). Asimismo, el código admite diferentes insumos de
+huella por periodo y diferentes insumos de polígonos de zonas de manejo
+especial, siempre que se definan correctamente según lo descrito en la
+sección de entradas citada.
 
 ## Organizar directorio de trabajo
 
@@ -72,7 +72,7 @@ sección de entradas citada.
 
 Las entradas de ejemplo de este ejercicio están almacenadas en
 [IAvH/Unidades
-compartidas/MBI/VariationHumanFootprintSpecialAreas](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs).
+compartidas/MBI/VariationHumanFootprintSpecialAreas](https://drive.google.com/open?id=18Bs1g79OWTwYBjLeMvi-MdIKRmk3o33B&usp=drive_fs).
 Una vez descargadas, reemplaza la carpeta “input” en el directorio donde
 está guardado este código con la carpeta “input” de la descarga. El
 directorio está organizado de esta manera que facilita la ejecución del
