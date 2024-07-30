@@ -1,0 +1,67 @@
+---
+title: "Productive activities diversity"
+output: 
+  html_document:
+    toc: true             
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+
+```
+
+## General description
+<div style="text-align: justify">  
+
+
+This document explains the script to calculate the Productive activities diversity indicator for Colombia
+
+The Productive activities diversity (PAD) is an indicator part of the Livelihoods objective and Materials and assistance dimension in the BCPI subindex for the MBI calculation. We used the Simpson's Diversity Index, which is a measure of diversity that considers both the number of categories (such as species or types of productive activities) and the relative abundance of each category. The index calculates the probability that two individuals randomly selected from a sample will belong to the same category.
+
+The Simpson's Diversity Index (D) is calculated using the formula:<div/>
+
+$$
+D=\frac{\sum{n(n-1)}}{N(N-1)}
+$$
+**Where:**
+
+n = is the number of individuals (or units) in the each category.
+
+N = is the total number of individuals (or units) across all categories.
+
+
+## Authorship
+
+<div style="text-align: justify"> The diversity of agricultural activities data: DANE 2024. [National agricultural survey (ENA)](https://www.dane.gov.co/index.php/estadisticas-por-tema/agropecuario/encuesta-nacional-agropecuaria-ena/encuesta-nacional-agropecuaria-por-departamentos).
+
+
+The function for calculate the *RLI*, was made by Maria Camila Diaz (**mdiaz@humboldt.org.co**), researcher of [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/es/), the routine can be found with the name *PAD* its last modification in R was July 2024. The documentation of the script to generate the RLI was built by Maria Camila Diaz in July 2024.
+
+## Script Description
+### General inputs required
+
+<div style="text-align: justify">**Productive activities data:** Matrix that include different types of agricultural practices, crop species, livestock types, or any other distinct productive activity, and in each row indicate if the activity is present (1) or not (0) for every year.Please save this files in the "Data" folder.
+
+
+## Outputs
+
+<div style="text-align: justify"> **PAD result:** Table with the PAD result for each year.
+
+**PAD plot:** plot that shows how the PAD change over the years. <div/>
+
+
+## Indicator interpretation
+
+<div style="text-align: justify">The resulting indicator ranges from 0 to 1, where 0 represents infinite diversity and 1 represents no diversity. It is considered that with greater diversity of productive activities, human pressure on ecosystems is reduced, decreasing overexploitation and degradation of specific ecosystems. In turn, communities are less vulnerable to environmental changes that could affect certain activities.<div/>
+
+
+
+## Considerations
+
+<div style="text-align: justify"> When interpreting the *PAD*, the following must be taken into account:
+
+- It gives more weight to the most abundant categories, which may sometimes underrepresented the importance of less common activities.<div/>
+

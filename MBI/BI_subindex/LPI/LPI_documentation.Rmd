@@ -1,0 +1,89 @@
+---
+title: "Living Planet Index"
+output: 
+  html_document:
+    toc: true             
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+
+```
+
+## General description
+<div style="text-align: justify">  
+
+
+This document explains the script to calculate the Living Planet Index for Colombia.
+
+The LPI is an indicator part of the population objective and abundance dimension in the BI subindex for the MBI calculation. It aims to provide an indicator of the overall health of the planet's ecosystems. It tracks changes in the abundance of wildlife populations and reflects the impact of environmental pressures. The LPI uses data from scientific studies, monitoring programs, and databases that track population sizes of vertebrate species (mammals, birds, reptiles, amphibians, and fish) to calculate the average rate of change in population sizes over time, providing a composite measure of biodiversity trends (WWF, 2022). 
+
+For more detailed information on the LPI, visit the [Living Planet Index website](https://www.livingplanetindex.org/).<div/>
+
+## Authorship
+
+<div style="text-align: justify"> Species data: LPI 2016. Living Planet Index database. 2016. Available: [Living Planet Index website](https://www.livingplanetindex.org/).
+
+
+The function for calculate the *LPI*, was made by Maria Camila Diaz (**mdiaz@humboldt.org.co**), researcher of [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/es/), using the [rlpi R package](https://github.com/Zoological-Society-of-London/rlpi/blob/master/README.Rmd) proposed by the Zoological Society of London (ZSL) team. The routine can be found with the name *LPI* its last modification in R was July 2024. The documentation of the script to generate the RLI was built by Maria Camila Diaz in July 2024.
+
+
+Literature cited:
+
+- WWF (2022) Living Planet Report 2022 – Building a nature- positive society. Almond, R.E.A., Grooten, M., Juffe Bignoli,  D. & Petersen, T. (Eds). WWF, Gland, Switzerland.<div/>
+
+
+## Script Description
+### General inputs required
+
+<div style="text-align: justify">**Population data:** Species abundance in several years. We used the LPI database cut to Colombia.
+
+
+In the "data" folder Upload file with species table addresses, group and corresponding weights.For the species tables is important to remove NAs (trailing years with no data)
+
+It is important that the table have this format:
+
+| **FileName**                  | **Group**  | **Weighting** |
+|:------------------------------|:----------:|:-------------:|
+| data/Aves_lpi_col.txt         | 1          | 0.25          |
+| data/Reptilia_lpi_col.txt     | 1          | 0.25          |
+| data/Actinopteri_lpi_col.txt  | 1          | 0.25          |
+| data/Amphibia_lpi_col.txt     | 1          | 0.25          |
+
+The structure of each File is the following:
+
+| **Binomial**            | **ID**  | **year** | **popvalue** |
+|:------------------------|:-------:|:--------:|:------------:|
+| Ognorhynchus_icterotis  | 3342    | 1999     | 82           |
+| Ognorhynchus_icterotis  | 3342    | 2000     | 100          |
+| Ognorhynchus_icterotis  | 3342    | 2001     | 147          |
+| Setophaga_ruticilla     | 18782   | 2010     | 8.6879       |
+
+
+
+## Outputs
+
+<div style="text-align: justify">**LPI plot:** plot that shows how the LPI change over the years.<div/>
+
+
+## Indicator interpretation
+
+<div style="text-align: justify">The LPI shows the average rate of change in animal population sizes, with species and populations exhibiting increasing, declining, and stable trends. It represents the monitored populations included in the index, encompassing data for both threatened and non-threatened species, provided they are monitored consistently over time..<div/>
+
+
+
+## Considerations
+
+<div style="text-align: justify"> When interpreting the *LPI*, the following must be taken into account:
+
+- The LPI relies on available data on population monitoring, which may be unevenly distributed across regions and species, leading to potential biases.
+
+- While the index provides valuable insights, it mainly covers vertebrates, potentially overlooking trends in invertebrates, plants, and other organisms.
+
+- A declining global LPI doesn’t mean that all species and populations are in decline.
+
+- The LPI doesn’t necessarily represent trends in other populations, species or biodiversity as a whole.
+
