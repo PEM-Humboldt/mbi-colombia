@@ -1,0 +1,82 @@
+---
+title: "Area of natural land covers in natural disaster zones"
+output: 
+  html_document:
+    toc: true             
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+
+```
+
+## General description
+<div style="text-align: justify">  
+
+
+This document explains the script to calculate the Area of natural land covers in natural disaster zones indicator for Colombia
+
+The Area of natural land covers in natural disaster zones (NCND) is an indicator part of the Natural disaster protection objective and Regulation dimension in the BCPI subindex for the MBI calculation. Natural land covers, such as forests, grasslands, and wetlands, play a critical role in mitigating the impacts of natural disasters like flooding, erosion, and landslides. They provide essential ecosystem services that regulate natural processes, including water regulation, soil formation, and nutrient cycling, which are crucial for disaster mitigation. Healthy, diverse ecosystems are more resilient to extreme weather events and can recover more quickly from disturbances, with biodiversity in natural land covers contributing to this resilience. Furthermore, natural vegetation, especially forests, play a role in climate regulation by sequestering carbon dioxide, which can help to mitigate some of the effects of climate change that exacerbate natural disasters. 
+
+For this indicator we used layers related to the probability of occurrence of flooding, erosion and landslides: 
+
+1. Flooding: Natural vegetation, especially forests and wetlands, can absorb and slow down the flow of water, reducing the severity and speed of runoff during heavy rains. Riparian buffers, which are vegetated areas along rivers and streams, help absorb excess water and prevent it from flooding nearby areas (Anderson et al., 2006). 
+
+2. Soil erosion: Vegetation cover helps to protect the soil from the direct impact of raindrops, which can dislodge soil particles and lead to erosion. The root networks of plants, particularly trees and shrubs, hold soil in place and reduce the rate of erosion (Cerdan et al., 2010). 
+
+3. Landslides: Tree roots and other vegetation help to stabilize slopes by anchoring the soil, reducing the likelihood of landslides (Kokutse et al., 2016; Ziemer, 1981). Vegetation also regulates the water content in the soil, as excess water can reduce the cohesion of soil particles and increase the risk of landslides (Ziemer, 1981). Additionally, by preventing soil erosion, vegetation helps maintain the integrity of slopes, which can be destabilized by excessive erosion.
+
+
+## Authorship
+
+<div style="text-align: justify"> Landslides, flood and erosion probability layers and Land Cover layer for the years 2002, 2012 and 2018 done by the Instituto de Hidrología, Meteorología y Estudios Ambientales - IDEAM, the Instituto Amazónico de Investigaciones Científicas -SINCHI, and Parques Nacionales Naturales de Colombia -PNN and can be download from [Catálogo de Mapas del Sistema de Información Ambiental de Colombia -SIAC](https://www.siac.gov.co/catalogo-de-mapas).
+
+
+The function for calculate the *RLI*, was made by Maria Camila Diaz (**mdiaz@humboldt.org.co**), researcher of [Instituto de Investigación de Recursos Biológicos Alexander von Humboldt](http://www.humboldt.org.co/es/), the routine can be found with the name *NCND* its last modification in R was July 2024. The documentation of the script to generate the RLI was built by Maria Camila Diaz in July 2024.
+
+Literature cited:
+
+- Kokutse, N. K., Temgoua, A. G. T., & Kavazović, Z. (2016). Slope stability and vegetation: Conceptual and numerical investigation of mechanical effects. Ecological Engineering, 86, 146-153.
+
+- Ziemer, R. R. (1981, September). The role of vegetation in the stability of forested slopes. In Proceedings of the International Union of Forestry Research Organizations, XVII World Congress (Vol. 1, pp. 297-308). Kyoto, Japan: IUFRO.
+
+- Cerdan, O., Govers, G., Le Bissonnais, Y., Van Oost, K., Poesen, J., Saby, N., ... & Dostal, T. (2010). Rates and spatial variations of soil erosion in Europe: A study based on erosion plot data. Geomorphology, 122(1-2), 167-177.
+
+- Anderson, B. G., Rutherfurd, I. D., & Western, A. W. (2006). An analysis of the influence of riparian vegetation on the propagation of flood waves. Environmental Modelling & Software, 21(9), 1290-1296.<div/>
+
+
+## Script Description
+### General inputs required
+
+<div style="text-align: justify">**Natural disaster layers:** Landslide layer, Soil erosion layer, Flood layer.Please save this files in the "Data" folder.
+
+**Natural Land Cover layers:** Reclassification of IDEAM Land Cover data, selecting natural covers only. Please change de directory path in the script. 
+
+
+## Outputs
+
+<div style="text-align: justify"> **NLCND result:** Table with the NLCND result for each year.
+
+**NLCND plot:** plot that shows how the NLCND change over the years. <div/>
+
+
+## Indicator interpretation
+
+<div style="text-align: justify">A greater area of natural land covers in zones with a high probability of natural disasters is considered to be better protected both from the occurrence of these disasters and from suffering their negative effects if they do occur. The total area of natural disasters is the maximum, where it is considered that the territory is highly protected against these events.<div/>
+
+
+
+## Considerations
+
+<div style="text-align: justify"> When interpreting the *NLCND*, the following must be taken into account:
+
+- According to the National Legend of Land Covers, the minimum mapping unit corresponds to 25 hectares, and smaller coverage areas are not represented.
+
+- The Land Cover Maps were converted to raster format with an approximate resolution of 30 meters and reprojected to the EPSG 4326 coordinate system. The figures presented should be considered approximate and not absolute values.
+
+- The natural disaster probability layers are not updated periodically.<div/>
+
+
