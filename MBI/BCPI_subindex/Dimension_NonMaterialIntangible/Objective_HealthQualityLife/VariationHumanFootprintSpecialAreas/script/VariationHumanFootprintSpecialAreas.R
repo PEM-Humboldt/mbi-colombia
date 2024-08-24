@@ -94,13 +94,26 @@ if(i>1){
 }
 
 ## Plot de cambio y tendencia ####
-changeIHEH_AME_data<- changeIHEH_AME %>% dplyr::mutate(period= as.numeric(period))
+changeIHEH_AME_data<- changeIHEH_AME %>% dplyr::mutate(period= as.numeric(period),
+                                                       perc_changeIHEH   =perc_changeIHEH   *100,
+                                                       trend=trend*100) %>%
+  dplyr::rename(`Promedio de IHEH`= IHEH_mean , 
+                `Cambio de IHEH`= changeIHEH  ,
+                Tendencia= trend, 
+                Periodo= period, 
+                `% de Cambio IHEH`= perc_changeIHEH )
 
-changeIHEH_AME_plotdata<- tidyr::pivot_longer(changeIHEH_AME_data, cols = -period, names_to = "variable", values_to = "value")
 
-changeIHEH_plot<- ggplot(changeIHEH_AME_plotdata, aes(x = period, y = value, color = variable)) +
+
+
+changeIHEH_AME_plotdata<- tidyr::pivot_longer(changeIHEH_AME_data, cols = -Periodo, names_to = "variable", values_to = "value")%>% 
+  dplyr::mutate(variable = factor(variable, levels=c("Periodo",       "Promedio de IHEH",  "Cambio de IHEH",   "% de Cambio IHEH", "Tendencia"  ) ))
+
+changeIHEH_plot<- ggplot(changeIHEH_AME_plotdata, aes(x = Periodo, y = value, color = variable)) +
   geom_line(group = 1) +
-  geom_point() + facet_wrap(~ variable, scales = "free_y") + theme_minimal()
+  geom_point() + facet_wrap(~ variable, scales = "free_y") + 
+  labs(color="", x="", y="")+
+  theme_minimal()
 
 print(changeIHEH_plot)
 
@@ -109,8 +122,8 @@ print(changeIHEH_plot)
 # Exportar tablas
 
 openxlsx::write.xlsx(IHEH_typeAME, file.path(output, paste0("IHEH_typeAME", ".xlsx")))
-openxlsx::write.xlsx(IHEH_AME, file.path(output, paste0("IHEH_AME", ".xlsx")))
-openxlsx::write.xlsx(changeIHEH_AME, file.path(output, paste0("changeIHEH_AME", ".xlsx")))
+#openxlsx::write.xlsx(IHEH_AME, file.path(output, paste0("IHEH_AME", ".xlsx")))
+openxlsx::write.xlsx(changeIHEH_AME_data, file.path(output, paste0("changeIHEH_AME", ".xlsx")))
 
 # Exportar figuras
 ggsave(file.path(output, paste0("results_trend", ".jpg")), changeIHEH_plot)
