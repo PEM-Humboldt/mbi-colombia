@@ -24,7 +24,7 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
@@ -72,14 +72,23 @@ if(i>1){
 }
 
 ## Plot de cambio y tendencia ####
-changeArea_cobsNat_data<- changeArea_cobsNat %>% dplyr::mutate(period= as.numeric(period))
+changeArea_cobsNat_data<- changeArea_cobsNat %>% dplyr::mutate(period= as.numeric(period),
+                                                               perc_changeArea=perc_changeArea*100,
+                                                               trend=trend*100) %>%
+  dplyr::rename(`% Cambio Area`= perc_changeArea, 
+        `Cambio de Área`= changeArea   ,
+         Tendencia= trend, 
+         Periodo= period, 
+         `Área km^2`= area_km2)
 
-changeArea_cobsNat_plotdata<- tidyr::pivot_longer(changeArea_cobsNat_data, cols = -period, names_to = "variable", values_to = "value")
+changeArea_cobsNat_plotdata<- tidyr::pivot_longer(changeArea_cobsNat_data, cols = -Periodo, names_to = "variable", values_to = "value") %>% 
+  dplyr::mutate(variable = factor(variable, levels=c("Periodo",       "Área km^2",  "Cambio de Área",   "% Cambio Area", "Tendencia"  ) ))
 
-changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = period, y = value, color = variable)) +
+changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = Periodo, y = value, color = variable)) +
   geom_line(group = 1) +
   geom_point() +
   facet_wrap(~ variable, scales = "free_y") +
+  labs(color="", x="", y="")+
   theme_minimal()+
   theme(text = ggplot2::element_text(size = 8))
 print(changeArea_plot)
@@ -89,7 +98,7 @@ print(changeArea_plot)
 ## Exportar resultados ####
 # Exportar tablas
 openxlsx::write.xlsx(area_cobsNat, file.path(output, paste0("area_cobsNat", ".xlsx")))
-openxlsx::write.xlsx(changeArea_cobsNat, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
+openxlsx::write.xlsx(changeArea_cobsNat_data, file.path(output, paste0("changeArea_cobsNat", ".xlsx")))
 # Exportar figuras
 ggsave(file.path(output, paste0("results_trend", ".jpg")), changeArea_plot)
 
