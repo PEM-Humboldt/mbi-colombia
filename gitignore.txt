@@ -1,0 +1,4 @@
+# Ignorar cualquier directorio input y output
+**/input/*
+**/output/*
+
