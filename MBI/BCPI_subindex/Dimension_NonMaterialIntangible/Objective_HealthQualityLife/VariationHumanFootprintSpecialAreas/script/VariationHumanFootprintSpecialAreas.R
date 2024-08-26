@@ -25,11 +25,15 @@ output<- file.path(dir_work, "output"); dir.create(output)
 
 #### Definir entradas necesarias para la ejecución del análisis ####
 input <- list(
-  studyArea= file.path(input_folder, "studyArea", "antioquia.shp"),  # Ruta del archivo espacial que define el área de estudio
+  studyArea= file.path(input_folder, "studyArea", "ColombiaDeptos.gpkg"),  # Ruta del archivo espacial que define el área de estudio
+  r_base = file.path(input_folder, "rbase4326.tif"),
   time_IHEH_List= list( # Lista de rutas de archivos espaciales que representan huella humana en diferentes años. Deben tener los mismos rangos de valor para ser comparables (ej. 0 a 100) , extension y sistema de coordenadas.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de heulla humana. Esto permitira ordenarlos posteriormente
+    "1970"= file.path(input_folder, "HumanFootprint", "IHEH_1970.tif"), # Indice de huella humana para Colombia del año 1970 IAvH
+    "1990"= file.path(input_folder, "HumanFootprint", "IHEH_1990.tif"), # Indice de huella humana para Colombia del año 1990 IAvH
+    "2000"= file.path(input_folder, "HumanFootprint", "IHEH_2000.tif"), # Indice de huella humana para Colombia del año 2000 IAvH
     "2015"= file.path(input_folder, "HumanFootprint", "IHEH_2015.tif"), # Indice de huella humana para Colombia del año 2015 IAvH
-    "2018"= file.path(input_folder, "HumanFootprint", "IHEH_2018.tif"), # Indice de huella humana para Colombia del año 2018 IAvH
-    "2019"= file.path(input_folder, "HumanFootprint", "IHEH_2019.tif")  # Indice de huella humana para Colombia del año 2019 IAvH
+    "2018"= file.path(input_folder, "HumanFootprint", "IHEH_2018.tif") # Indice de huella humana para Colombia del año 2018 IAvH
+   # "2019"= file.path(input_folder, "HumanFootprint", "IHEH_2019.tif")  # Indice de huella humana para Colombia del año 2019 IAvH
   ),
   AME_List= list( # Lista de rutas de archivos espaciales que representan areas de manejo especial
     "ResguardosIndigenas"= file.path(input_folder, "SpecialAreas", "Resguardos_ANT2024.gpkg") # Resguardos indigenas formalizados en Colombia - Agencia nacional de tierras 2024
@@ -58,7 +62,18 @@ ame<- pblapply(list_AME, function(type_ame) {
   dplyr::summarise(across(geometry, ~ sf::st_union(.)), .groups = "drop")
 
 ### Cargar capas de huella ####
-list_IHEH<- pblapply(input$time_IHEH_List, function(x) terra::rast(x)  )
+
+rbase0<-rast(input$r_base)
+
+CargarProyectar<-function(x) {
+  y<-terra::rast(x)
+  if(crs(y)!= 4326){
+    y<-project(y,rbase0 )
+  }
+  return(y)
+}
+
+list_IHEH<- pblapply(input$time_IHEH_List, CargarProyectar )
 list_IHEH<- list_IHEH[sort(names(list_IHEH))] # ordenar por año
 
 
