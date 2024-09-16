@@ -175,12 +175,14 @@ espacial del área de estudio. Además, la entrada de lista
 coberturas naturales en diferentes momentos. En este caso, se utilizaron
 los polígonos de coberturas naturales según la clasificación Corine Land
 Cover para Colombia, reportados por el IDEAM a escala 1:100k para los
-años 2002, 2009, 2012 y 2018 No se realiza procesamiento posterior a
+años 2002, 2009, 2012 , 2018 y 2020. No se realiza procesamiento posterior a
 estos mapas, ya que el código asume que los poligonos de dichas entradas
 corresponden solo a coberturas naturales en esos periodos. Es importante
 que los nombres de cada elemento a cargar se especifiquen con años
 numéricos, ya que esto será útil para organizar el análisis de cambio y
 tendencias posterior.
+
+Para obtener los poligonos de las capas de coberturas naturales provenientes del ideam se hizo una reclasificación de las capas originales basados en siguiente tabla: xxxxxx. El procedimiento para hacer la reclasificación está en xxxxxx. 
 
 ## Cargar insumos
 
