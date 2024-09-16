@@ -2,6 +2,9 @@
 **/input/*
 **/output/*
 
+# No ignorar los archivos .gitkeep dentro de carpetas
+!**/.gitkeep
+
 # History files
 .Rhistory
 .Rapp.history
