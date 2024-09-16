@@ -1,17 +1,8 @@
-Análisis multitemporal de la huella espacial humana
+Reclasificación de coberturas
 ================
-En este código se realiza un análisis multitemporal (1970, 1990, 2000, 2015, 2018) de la huella espacial humana por municipios en la altillanura colombiana. 
-Se calculan estadísticas zonales (promedio, mediana, desviación estándar) de los valores de huella y estadisticos zonales para obtener la frecuencias de categorias de intensidad de  IHEH. La categorización de IHEH tambien se efectúa en el código 
+Este código reclasifica el mapa de coberturas descargado de la plataforma de [datos abiertos](https://experience.arcgis.com/experience/568ddab184334f6b81a04d2fe9aac262/page/Datos-Abiertos-Geogr%C3%A1ficos-/) del IDEAM. Y Guarda unicamente aquellas que están asociadas a coberturas naturales para se usadas en los indicadores de MBI. La capa de salida tiene proyección 4326.
 
-Los resultados se guardan en dos data frames:
-
-Stat_values: Contiene estadísticas zonales (promedio, mediana, desviación estándar) para cada departamento y año .
-Stat_reclass: Contiene la frecuencia y porcentaje de categorías de reclasificación para cada departamento y año.
-
-En la última sección del código las tablas se organizan para su exportación en formatos .csv y html para tener tablas interactivas que faciliten la exploración. Seguidamente se preparan y exportan gráficas de los datos que muestren la evolución de la IHEH a través de los años y permita comparar  entre municipios.
-
-Proporciona información sobre cómo los cambios en la presión y el impacto de las actividades humanas están ejerciendo presión sobre la
-biodiversidad en estas áreas. 
+Es posible también guardar el objeto tabla_m para guardar todas la coberturas con la reclasificación. En este caso la capa se guardará con la proyección MAGNA-SIRGAS: 4686
 
 ## Organizar directorio de trabajo
 
