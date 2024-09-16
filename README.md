@@ -1,4 +1,4 @@
-Rutinas MBI Colombia
+MBI Colombia
 ================
 
 Este repositorio describe las rutinas utilizadas para la estimación de
