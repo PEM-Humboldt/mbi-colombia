@@ -1,6 +1,5 @@
 Rutinas MBI Colombia
 ================
-true
 
 Este repositorio describe las rutinas utilizadas para la estimación de
 indicadores de estado de biodiversidad, asociadas al Piloto para la
