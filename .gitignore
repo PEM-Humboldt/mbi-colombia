@@ -4,6 +4,7 @@
 
 # No ignorar los archivos .gitkeep dentro de carpetas
 !**/.gitkeep
+!**/input/lookup_corine.csv
 
 # History files
 .Rhistory
