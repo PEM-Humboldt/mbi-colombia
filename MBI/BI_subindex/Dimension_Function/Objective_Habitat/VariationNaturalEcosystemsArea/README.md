@@ -182,7 +182,7 @@ que los nombres de cada elemento a cargar se especifiquen con años
 numéricos, ya que esto será útil para organizar el análisis de cambio y
 tendencias posterior.
 
-Para obtener los poligonos de las capas de coberturas naturales provenientes del ideam se hizo una reclasificación de las capas originales basados en siguiente tabla: [aquí]( Insumos/Coberturas Naturales/input/lookup_corine.csv). El procedimiento para hacer la reclasificación está en el siguiente repositorio [aquí](https://github.com/PEM-Humboldt/mbi-colombia/tree/main/Insumos/Coberturas%20Naturales). 
+Para obtener los poligonos de las capas de coberturas naturales provenientes del ideam se hizo una reclasificación de las capas originales basados en siguiente tabla: [aquí]( Insumos/Coberturas Naturales/input/lookup_corine.csv](https://github.com/PEM-Humboldt/mbi-colombia/blob/main/Insumos/Coberturas%20Naturales/input/lookup_corine.csv). El procedimiento para hacer la reclasificación está en el siguiente repositorio [aquí](https://github.com/PEM-Humboldt/mbi-colombia/tree/main/Insumos/Coberturas%20Naturales). 
 
 ## Cargar insumos
 
