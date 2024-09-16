@@ -11,9 +11,7 @@ El directorio del proyecto está organizado de esta manera que facilita la ejecu
 código:
 
     Coberturas Naturales
-    │- 
-    │    
-    └-
+    │
     │ │
     │ └-input
     │    │_ Coberturas
