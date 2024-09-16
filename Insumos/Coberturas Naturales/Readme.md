@@ -6,23 +6,23 @@ Es posible también guardar el objeto tabla_m para guardar todas la coberturas c
 
 ## Organizar directorio de trabajo
 
-<a id="ID_seccion1"></a>
-Las entradas de ejemplo de este ejercicio están almacenadas en
-[aquí](https://drive.google.com/file/d/1Xg04VRR4F4lbEFuua1d9FwtHeVZ28A1x/view?usp=drive_link).
-Una vez descargadas y descomprimida, reemplaze la carpeta “Originales” en el directorio Datos del proyecto.
+El archivo shapefile descargada del ideam debe guardarse en la carpeta input/Coberturas.
 El directorio del proyecto está organizado de esta manera que facilita la ejecución del
 código:
 
-    Códigos
-    │- Huella_Altillanura
+    Coberturas Naturales
+    │- 
     │    
-    └-Datos
+    └-
     │ │
-    │ └- Originales: replaze aquí los datos que bajo
-    │ │   │
+    │ └-input
+    │    │_ Coberturas
+    │    │   │_archivos relacionados con el shape de cobertura
+    │    │_lookup_corine.csv
+    │
     │ │   
-    │ └- Intermedios
+    │ └- output
     │     │     
     |
-    └- Resultados
+    └- Reclasificación_coberturas0
 
