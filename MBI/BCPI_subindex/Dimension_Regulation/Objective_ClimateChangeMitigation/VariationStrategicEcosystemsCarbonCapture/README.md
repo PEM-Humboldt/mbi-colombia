@@ -1,7 +1,7 @@
 ---
 title: "Flujo de trabajo VariationStrategicEcosystemsCarbonCapture – Indicador de Variación del Área de Ecosistemas Estratégicos con Potencial de Captura de Carbono"
 author: 
-  - name: "Rincon-Parra VJ"
+  - name: "Rincon-Parra VJ, Alejandra Narváez Vallejo"
     email: "rincon-v@javeriana.edu.co"
     affiliation: "Gerencia de información cientifica. Instituto de Investigación de Recursos Biológicos Alexander von Humboldt - IAvH"
 output: 
@@ -157,7 +157,7 @@ tener el mismo sistema de coordenadas. En este flujo de trabajo, toda la
 información cartográfica se maneja en el sistema de coordenadas WGS84
 (EPSG:4326). El código puede ejecutarse en cualquier sistema de
 coordenadas, siempre y cuando todos los insumos espaciales tengan la
-misma proyección. Se pueden usar distintos tipos de vectores espaciales
+misma proyección, la función "Proyectar" se encarga de hacer la transformación necesaria de las capas de ecosistemas estrategicos (se puede adaptar a todos los insumos), esta función aparece en el bloque de código donde se cargan las capas en R. Se pueden usar distintos tipos de vectores espaciales
 (por ejemplo, .gpkg, .geoJson, .shp). En este ejemplo, se utiliza .gpkg
 por ser el más eficiente para análisis espaciales.
 
@@ -240,6 +240,21 @@ studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggrega
 
 ### Cargar ecosistemas estrategicos ####
 list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(input$StratEcoSystemList[[j]]) %>% dplyr::mutate(ZonaEcos=j) )
+
+# corregir  proyección de ser necesario
+SisRef <- 4326 # sistema de referencia necesario
+
+Proyectar<-function(capa){
+  
+  if (st_crs(capa)$epsg != st_crs(SisRef)) {
+    print(st_crs(capa)$epsg != SisRef)
+    capa<- st_transform(capa, crs= SisRef)
+    
+  } else 
+    return(capa)
+}
+
+list_strategic <- lapply(list_strategic, Proyectar)
 
 #### Corte de ecosistemas estrategicos por area de estudio ####
 strategic_ecosystems<- pblapply(list_strategic, function(eco_strategic) {
