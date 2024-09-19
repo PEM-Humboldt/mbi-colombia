@@ -202,9 +202,13 @@ delimitaciones generales o remanentes actuales sin información detallada
 del área potencial base. Esto implica que las delimitaciones pueden no
 reflejar completamente el rango histórico o potencial de los
 ecosistemas, lo cual puede afectar la precisión de los análisis
-espaciales. Para este ejercicio, se utilizaron como límites los biomas
-asociados a los ecosistemas estratégicos de bosques humedos andinos,
-bosques secos, páramos y manglares. Estos biomas fueron seleccionados
+espaciales. Para este ejercicio, se utilizaron como límites de los ecosisitemas estratégios:
+- Bosques humedos andinos: los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de bosques humedos andinos(Columna: BIOMA_PREL = Orobioma Andino, Orobioma Subandino y Zonobioma Humedo tropical )
+- Páramos: los biomas (de Mapbiomas) asociados a los Páramos (xxxx)
+- los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de Mangláres (Columna: ECOS_GENER = Manglar o Manglar de aguas mixohalinas ) y los manglares reportados por el [Global Mangrove Watch](https://www.globalmangrovewatch.org/) de 1996.
+- Los bosques secos de la capa de Etter xxxx
+
+Estos biomas fueron seleccionados
 debido a su importancia ecológica y su capacidad significativa para
 capturar y almacenar carbono. Sin embargo, es importante señalar que el
 código es flexible y puede ejecutarse con las delimitaciones de
