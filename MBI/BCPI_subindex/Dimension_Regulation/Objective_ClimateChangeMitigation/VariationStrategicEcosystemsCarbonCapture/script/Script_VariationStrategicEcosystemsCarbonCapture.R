@@ -30,12 +30,17 @@ input <- list(
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
     "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
-    "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
+    "2018"= file.path(input_folder, "covs", "CLC_natural_2018nc.gpkg"), # Cobertura natural del año 2018 IDEAM
+    "2020"= file.path(input_folder, "covs", "CLC_natural_2020nc.gpkg") # Cobertura natural del año 2018 IDEAM
   ),
   StratEcoSystemList= list( # Lista de rutas de archivos espaciales que representan ecosistemas estrategicos.
-    "Manglar"= file.path(input_folder, "strategicEcosystems", "Bioms_Manglar.gpkg"), # Biomas asociados a manglar
-    "Paramo"= file.path(input_folder, "strategicEcosystems", "Bioms_Paramo.gpkg"), # Biomas asociados a Paramo
-    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueSeco.gpkg"), # Biomas asociados a BosqueSeco
+    #"Manglar"= file.path(input_folder, "strategicEcosystems", "manglar_Etter.shp"), # Biomas asociados a manglar
+    #"Manglar_mfw"= file.path(input_folder, "strategicEcosystems", "manglar_1996_mfw.shp"), # Biomas asociados a manglar
+    "Manglar"= file.path(input_folder, "strategicEcosystems", "Biom_MFW_Manglar1.shp"), # Biomas asociados a manglar
+    #"Manglar"= file.path(input_folder, "strategicEcosystems", "mapbiomas_manglar.shp"), # Biomas asociados a manglar
+    #"Paramo"= file.path(input_folder, "strategicEcosystems", "paramos_Etter.shp"), # Biomas asociados a Paramo
+    "Paramo"= file.path(input_folder, "strategicEcosystems", "p3.shp"), # Biomas asociados a Paramo
+    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "BosqueSecoTropical_100K.shp"), # Biomas asociados a BosqueSeco
     "BosqueHumedo"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueHumedo.gpkg") # Biomas asociados a BosqueHumedo
   )
 )
@@ -51,6 +56,23 @@ studyArea<- terra::vect(input$studyArea) %>% terra::buffer(0) %>% terra::aggrega
 
 ### Cargar ecosistemas estrategicos ####
 list_strategic<- pblapply(names(input$StratEcoSystemList), function(j) st_read(input$StratEcoSystemList[[j]]) %>% dplyr::mutate(ZonaEcos=j) )
+
+
+# corregir  proyección de ser necesario
+
+SisRef <- 4326 # sistema de referencia necesario
+
+Proyectar<-function(capa){
+  
+  if (st_crs(capa)$epsg != st_crs(SisRef)) {
+    print(st_crs(capa)$epsg != SisRef)
+    capa<- st_transform(capa, crs= SisRef)
+    
+  } else 
+    return(capa)
+}
+
+list_strategic <- lapply(list_strategic, Proyectar)
 
 #### Corte de ecosistemas estrategicos por area de estudio ####
 strategic_ecosystems<- pblapply(list_strategic, function(eco_strategic) {
@@ -119,6 +141,22 @@ changeArea_plot<- ggplot(changeArea_cobsNat_plotdata, aes(x = Periodo, y = value
   theme(text = ggplot2::element_text(size = 8))
 print(changeArea_plot)
 
+ggplot(area_cobsNat_ecosystem)+
+  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
+
+ggplot(filter(area_cobsNat_ecosystem, ZonaEcos!="BosqueHumedo"))+
+  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
+
+
+viejo<-read.xlsx("F:/backup260824/3_CódgosR/GIT/mbi-colombia/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture/script/output0/area_cobsNat_ecosystem.xlsx")
+
+viejo<-read.xlsx("C:/Users/alejandra.narvaez/Downloads/area_cobsNat_ecosystem1.xlsx", sheet = 1)
+
+ggplot(viejo)+
+  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
+
+ggplot(filter(viejo, ZonaEcos!="BosqueHumedo"))+
+  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
 
 ## Exportar resultados ####
 # Exportar tablas
