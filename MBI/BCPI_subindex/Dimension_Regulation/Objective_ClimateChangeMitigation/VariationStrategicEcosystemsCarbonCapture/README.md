@@ -69,9 +69,8 @@ la sección de entradas citada.
 
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en
-[IAvH/Unidades
-compartidas/MBI/VariationStrategicEcosystemsCarbonCapture](https://drive.google.com/open?id=14fv_-wjqdcWIaQMBiGeY2zScZiwXgRWm&usp=drive_fs).
+Las entradas de ejemplo de este ejercicio están almacenadas en esta 
+[carpeta](https://drive.google.com/file/d/1zkBMgH9evJPIaydnfZ-MtdWZ_X_8nU6m/view?usp=drive_link).
 Una vez descargadas, reemplaza la carpeta “input” en el directorio donde
 está guardado este código con la carpeta “input” de la descarga. El
 directorio está organizado de esta manera que facilita la ejecución del
