@@ -62,9 +62,8 @@ la sección de entradas citada.
 
 <a id="ID_seccion1"></a>
 
-Las entradas de ejemplo de este ejercicio están almacenadas en
-[IAvH/Unidades
-compartidas/MBI/VariationNaturalEcosystemsArea/scripts](https://drive.google.com/open?id=1-kNyyptInMkeqaK5MGcMekZ0J49U-gJd&usp=drive_fs).
+Las entradas de ejemplo de este ejercicio están almacenadas en esta 
+[carpeta](https://drive.google.com/file/d/1SR1QplhpSVU7AF0k8lzvu-s5SOQXYRkz/view?usp=drive_link).
 Una vez descargadas, reemplaza la carpeta “input” en el directorio donde
 está guardado este código con la carpeta “input” de la descarga. El
 directorio está organizado de esta manera que facilita la ejecución del
