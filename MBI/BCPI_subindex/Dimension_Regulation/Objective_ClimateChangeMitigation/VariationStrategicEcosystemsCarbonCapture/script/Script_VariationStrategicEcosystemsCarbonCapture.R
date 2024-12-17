@@ -5,7 +5,7 @@
 packagesPrev <- installed.packages()[,"Package"]  
 packagesNeed <- librerias <- c("this.path", "magrittr", "dplyr", "plyr", "pbapply", "data.table", "raster", "terra", "sf", "ggplot2", 
                                "tidyr", "RColorBrewer", "reshape2", "ggnewscale","openxlsx", "ggspatial",
-                               "future", "future.apply", "progressr")  # Define los paquetes necesarios para ejecutar el codigo
+                               "future", "future.apply", "progressr", "lwgeom")  # Define los paquetes necesarios para ejecutar el codigo
 new.packages <- packagesNeed[!(packagesNeed %in% packagesPrev)]  # Identifica los paquetes que no estC!n instalados
 if(length(new.packages)) {install.packages(new.packages, binary = TRUE)}  # Instala los paquetes necesarios que no estC!n previamente instalados
 
@@ -31,15 +31,11 @@ input <- list(
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
     "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
     "2018"= file.path(input_folder, "covs", "CLC_natural_2018nc.gpkg"), # Cobertura natural del año 2018 IDEAM
-    "2020"= file.path(input_folder, "covs", "CLC_natural_2020nc.gpkg") # Cobertura natural del año 2018 IDEAM
+    "2020"= file.path(input_folder, "covs", "CLC_natural_2020nc.gpkg") # Cobertura natural del año 2020 IDEAM
   ),
   StratEcoSystemList= list( # Lista de rutas de archivos espaciales que representan ecosistemas estrategicos.
-    #"Manglar"= file.path(input_folder, "strategicEcosystems", "manglar_Etter.shp"), # Biomas asociados a manglar
-    #"Manglar_mfw"= file.path(input_folder, "strategicEcosystems", "manglar_1996_mfw.shp"), # Biomas asociados a manglar
     "Manglar"= file.path(input_folder, "strategicEcosystems", "Biom_MFW_Manglar1.shp"), # Biomas asociados a manglar
-    #"Manglar"= file.path(input_folder, "strategicEcosystems", "mapbiomas_manglar.shp"), # Biomas asociados a manglar
-    #"Paramo"= file.path(input_folder, "strategicEcosystems", "paramos_Etter.shp"), # Biomas asociados a Paramo
-    "Paramo"= file.path(input_folder, "strategicEcosystems", "p3.shp"), # Biomas asociados a Paramo
+    "Paramo"= file.path(input_folder, "strategicEcosystems", "paramos_Etter.shp"), # Biomas asociados a Paramo
     "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "BosqueSecoTropical_100K.shp"), # Biomas asociados a BosqueSeco
     "BosqueHumedo"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueHumedo.gpkg") # Biomas asociados a BosqueHumedo
   )
