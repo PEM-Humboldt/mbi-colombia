@@ -204,9 +204,8 @@ ecosistemas, lo cual puede afectar la precisión de los análisis
 espaciales. Para este ejercicio, se utilizaron como límites de los ecosisitemas estratégios:
 - Bosques humedos andinos: los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de bosques humedos andinos(Columna: BIOMA_PREL = Orobioma Andino, Orobioma Subandino y Zonobioma Humedo tropical )
 - Páramos:   Extraídos de la capa de [Etter, 1998](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/52be9cc9-a139-4568-8781-bbbda5590eab/attachments/Ecosistemas_Etter_1998.7z) (Columna: ECOSISTEMA = "Páramo Húmedo" o "Páramo Seco" ) 
-- los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de Mangláres (Columna: ECOS_GENER = Manglar o Manglar de aguas mixohalinas ) y los manglares reportados por el [Global Mangrove Watch](https://www.globalmangrovewatch.org/) de 1996.
-- Los bosques secos de la capa de [Etter, 1998](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/52be9cc9-a139-4568-8781-bbbda5590eab/attachments/Ecosistemas_Etter_1998.7z).
-
+- Mangláres: Unión de los biomas de [Ecosistemas potenciales de Colombia, año 2015, Escala 1:100.000](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/08b22fe2-5c4a-4b7a-89a8-ed6ea5d9cbdb/attachments/EcosistemasPotencialesDeColombia.7z )  asociados a los ecosistemas estratégicos de Mangláres (Columna: ECOS_GENER = Manglar o Manglar de aguas mixohalinas ) y los manglares reportados por el [Global Mangrove Watch](https://www.globalmangrovewatch.org/) de 1996.
+- Los bosques secos de la capa de los [Ecosistemas Generales Etter a escala 1:2'000.000, año 1998](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/52be9cc9-a139-4568-8781-bbbda5590eab/attachments/Ecosistemas_Etter_1998.7z).
 - Instituto Humboldt. 20154. Mapa de ecosistemas potenciales [Data set]. http://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/08b22fe2-5c4a-4b7a-89a8-ed6ea5d9cbdb
 
 Estos biomas fueron seleccionados
