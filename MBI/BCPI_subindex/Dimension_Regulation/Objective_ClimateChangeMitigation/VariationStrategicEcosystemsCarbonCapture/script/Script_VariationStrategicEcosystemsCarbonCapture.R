@@ -144,16 +144,6 @@ ggplot(filter(area_cobsNat_ecosystem, ZonaEcos!="BosqueHumedo"))+
   geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
 
 
-viejo<-read.xlsx("F:/backup260824/3_CódgosR/GIT/mbi-colombia/MBI/BCPI_subindex/Dimension_Regulation/Objective_ClimateChangeMitigation/VariationStrategicEcosystemsCarbonCapture/script/output0/area_cobsNat_ecosystem.xlsx")
-
-viejo<-read.xlsx("C:/Users/alejandra.narvaez/Downloads/area_cobsNat_ecosystem1.xlsx", sheet = 1)
-
-ggplot(viejo)+
-  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
-
-ggplot(filter(viejo, ZonaEcos!="BosqueHumedo"))+
-  geom_line(aes(x=period, y=area_km2,group=ZonaEcos,col=ZonaEcos))
-
 ## Exportar resultados ####
 # Exportar tablas
 openxlsx::write.xlsx(area_cobsNat_ecosystem, file.path(output, paste0("area_cobsNat_ecosystem", ".xlsx")))
