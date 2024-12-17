@@ -177,13 +177,13 @@ input <- list(
   timeNatCoverList= list( # Lista de rutas de archivos espaciales que representan coberturas naturales en diferentes años.  Cada elemento en la lista se nombra con el año correspondiente al que representa el archivo de cobertura natural. Esto permitira ordenarlos posteriormente
     "2002"= file.path(input_folder, "covs", "CLC_natural_2002.gpkg"), # Cobertura natural del año 2002 IDEAM
     "2009"= file.path(input_folder, "covs", "CLC_natural_2009.gpkg"), # Cobertura natural del año 2008 IDEAM
-    "2012"= file.path(input_folder, "covs", "CLC_natural_2012.gpkg"),  # Cobertura natural del año 2009 IDEAM
-    "2018"= file.path(input_folder, "covs", "CLC_natural_2018.gpkg") # Cobertura natural del año 2018 IDEAM
+    "2018"= file.path(input_folder, "covs", "CLC_natural_2018nc.gpkg"), # Cobertura natural del año 2018 IDEAM
+    "2020"= file.path(input_folder, "covs", "CLC_natural_2020nc.gpkg") # Cobertura natural del año 2020 IDEAM
   ),
   StratEcoSystemList= list( # Lista de rutas de archivos espaciales que representan ecosistemas estrategicos.
-    "Manglar"= file.path(input_folder, "strategicEcosystems", "Bioms_Manglar.gpkg"), # Biomas asociados a manglar
-    "Paramo"= file.path(input_folder, "strategicEcosystems", "Bioms_Paramo.gpkg"), # Biomas asociados a Paramo
-    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueSeco.gpkg"), # Biomas asociados a BosqueSeco
+    "Manglar"= file.path(input_folder, "strategicEcosystems", "Biom_MFW_Manglar1.shp"), # Biomas asociados a manglar
+    "Paramo"= file.path(input_folder, "strategicEcosystems", "paramos_Etter.shp"), # Biomas asociados a Paramo
+    "BosqueSeco"= file.path(input_folder, "strategicEcosystems", "BosqueSecoTropical_100K.shp"), # Biomas asociados a BosqueSeco
     "BosqueHumedo"= file.path(input_folder, "strategicEcosystems", "Bioms_BosqueHumedo.gpkg") # Biomas asociados a BosqueHumedo
   )
 )
@@ -203,9 +203,11 @@ reflejar completamente el rango histórico o potencial de los
 ecosistemas, lo cual puede afectar la precisión de los análisis
 espaciales. Para este ejercicio, se utilizaron como límites de los ecosisitemas estratégios:
 - Bosques humedos andinos: los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de bosques humedos andinos(Columna: BIOMA_PREL = Orobioma Andino, Orobioma Subandino y Zonobioma Humedo tropical )
-- Páramos: los biomas (de Mapbiomas) asociados a los Páramos (xxxx)
+- Páramos:   Extraídos de la capa de [Etter, 1998](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/52be9cc9-a139-4568-8781-bbbda5590eab/attachments/Ecosistemas_Etter_1998.7z) (Columna: ECOSISTEMA = "Páramo Húmedo" o "Páramo Seco" ) 
 - los biomas (de Mapbiomas) asociados a los ecosistemas estratégicos de Mangláres (Columna: ECOS_GENER = Manglar o Manglar de aguas mixohalinas ) y los manglares reportados por el [Global Mangrove Watch](https://www.globalmangrovewatch.org/) de 1996.
-- Los bosques secos de la capa de Etter xxxx
+- Los bosques secos de la capa de [Etter, 1998](http://geonetwork.humboldt.org.co/geonetwork/srv/api/records/52be9cc9-a139-4568-8781-bbbda5590eab/attachments/Ecosistemas_Etter_1998.7z).
+
+- Instituto Humboldt. 20154. Mapa de ecosistemas potenciales [Data set]. http://geonetwork.humboldt.org.co/geonetwork/srv/spa/catalog.search#/metadata/08b22fe2-5c4a-4b7a-89a8-ed6ea5d9cbdb
 
 Estos biomas fueron seleccionados
 debido a su importancia ecológica y su capacidad significativa para
