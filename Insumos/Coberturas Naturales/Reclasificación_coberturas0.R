@@ -1,6 +1,9 @@
 # Título: Reclasificación de coberturas
 #
-# Descripción: Este código descarga y reclasifica el mapa de coberturas del IDEAM. Y Guarda unicamente aquellas que están asociadas a coberturas naturales para se usadas en los indicadores de MBI.
+# Descripción: Este código descarga y reclasifica el mapa de coberturas del IDEAM. Se generan dos productos:
+# 1  Guarda unicamente aquellas que están asociadas a coberturas naturales para se usadas en los indicadores de MBI.
+# 2  Guarda todas las clases de coberturas 
+
 # La capa de salida tiene proyección 4326.
 # Es posible también guardar el objeto tabla_m para guardar todas la coberturas con la reclasificación. En este caso la capa se guardará con la proyección MAGNA-SIRGAS: 4686
 
@@ -77,7 +80,7 @@ dim(sub_cob)
 dim(look_up)
 dim(tabla_m)
 
-# sólo la coberturas naturales 
+## sólo la coberturas naturales  ####
 
 cov_nat <- filter(tabla_m,area_type=="N")%>%
   dplyr::mutate(fid = row_number())%>%
@@ -95,6 +98,18 @@ sim_cov_nat <-   st_union(cov_nat, by_feature = FALSE)
 # guardar los resultados como geopackage
 
 st_write(sim_cov_nat, file.path(dir_Resultados,paste0("CLC_natural_",año, ".gpkg")), delete_layer = T)
+
+## todas las clases de coberturas  ####
+
+cov_nat2 <- filter(tabla_m,area_type=="N")%>%
+  dplyr::mutate(fid = row_number())%>%
+  dplyr::select(fid)%>% # desactivar si se quiere tener toda la información para revisar
+  st_transform(4326)
+
+
+# guardar los resultados como geopackage
+
+st_write(cov_nat2, file.path(dir_Resultados,paste0("CLC_natural_",año, ".gpkg")), delete_layer = T)
 
 
 
