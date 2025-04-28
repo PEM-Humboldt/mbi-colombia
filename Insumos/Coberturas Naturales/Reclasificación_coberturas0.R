@@ -101,15 +101,15 @@ st_write(sim_cov_nat, file.path(dir_Resultados,paste0("CLC_natural_",año, ".gpk
 
 ## todas las clases de coberturas  ####
 
-cov_nat2 <- filter(tabla_m,area_type=="N")%>%
-  dplyr::mutate(fid = row_number())%>%
-  dplyr::select(fid)%>% # desactivar si se quiere tener toda la información para revisar
+cov_nat2 <- tabla_m%>%
+  #dplyr::mutate(fid = row_number())%>%
+  #dplyr::select(fid)%>% # desactivar si se quiere tener toda la información para revisar
   st_transform(4326)
 
 
 # guardar los resultados como geopackage
 
-st_write(cov_nat2, file.path(dir_Resultados,paste0("CLC_natural_",año, ".gpkg")), delete_layer = T)
+st_write(cov_nat2, file.path(dir_Resultados,paste0("CLC_clases_",año, ".gpkg")), delete_layer = T)
 
 
 
