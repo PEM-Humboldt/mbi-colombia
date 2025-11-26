@@ -29,7 +29,7 @@ write.csv(IUCN_COL, "Iso_COL.csv")
 IUCN_sp_col <- rredlist::rl_countries('CO', key = token)
 str(IUCN_sp_col) ##cambio rl_sp_country
 
-sp_endemicas <- read.csv2("C:/Users/walter.garcia/Downloads/RLI/RLI/RLI/data/table_2024-07-22-18-20-41.csv")
+sp_endemicas <- read.csv2("table_2024-07-22-18-20-41.csv")
 colnames(sp_endemicas)[2] <-"scientific_name"
 sp_endemicas <- sp_endemicas[,2] 
 # Extraer el data frame con las evaluaciones
